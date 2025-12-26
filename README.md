@@ -1,78 +1,116 @@
-# Apna Punjab Pizza Kebap
+# 🍛 NAMASTE Ristorante
 
-Welcome to the **Apna Punjab Pizza Kebap** full-stack web application! This project is built using **Next.js 14**, **TypeScript**, and **Tailwind CSS**. It integrates **Supabase** for order persistence and the **WhatsApp Cloud API** for order notifications.
+A modern, playful website for **NAMASTE Ristorante** - authentic Indian cuisine in Turin, Italy. Built with Next.js 14, featuring a unique hand-drawn indie aesthetic.
 
-## Project Structure
+## ✨ Features
 
-The project is organized as follows:
+- **Playful Hand-Drawn Design** - Organic sketchy borders, blob shapes, and micro-animations
+- **Interactive FluidReveal Hero** - Canvas-based image reveal with inertia and trail effects
+- **Complete Menu System** - 12 categories, 52 items with real-time cart management
+- **Responsive Checkout** - Full order flow with email notifications
+- **100% Halal** certified cuisine
+
+## 🎨 Design Aesthetic
+
+The website features a unique cartoonist/indie artist aesthetic:
+- Sketchy irregular borders with hand-drawn feel
+- Organic blob shapes as decorative elements
+- Playful animations (wiggle, float, bounce)
+- Warm color palette: saffron, turmeric, cardamom, cream
+- Handwritten accent fonts
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Email**: Resend API
+- **Notifications**: Telegram Bot API
+
+## 📁 Project Structure
 
 ```
-apna-punjab-pizza-kebap
-├── src
-│   ├── app
-│   │   ├── layout.tsx          # Main layout including header and footer
-│   │   ├── page.tsx            # Main landing page
-│   │   ├── menu                 # Menu related pages
-│   │   ├── cart                 # Cart related pages
-│   │   ├── checkout             # Checkout related pages
-│   │   ├── orders               # Admin orders page
-│   │   ├── api                  # API routes for orders and notifications
-│   │   └── globals.css          # Global styles
-│   ├── components               # Reusable components
-│   ├── lib                      # Library files for Supabase and WhatsApp
-│   ├── hooks                    # Custom hooks for state management
-│   ├── types                    # TypeScript types
-│   ├── data                     # Menu data
-│   └── contexts                 # Context API for cart management
-├── public                       # Public assets
-├── supabase                     # Supabase configuration and migrations
-├── .env.local.example           # Example environment variables
-├── .env.local                   # Actual environment variables
-├── .gitignore                   # Git ignore file
-├── next.config.js               # Next.js configuration
-├── tailwind.config.ts           # Tailwind CSS configuration
-├── tsconfig.json                # TypeScript configuration
-├── postcss.config.js            # PostCSS configuration
-├── package.json                 # Project dependencies and scripts
-└── README.md                    # Project documentation
+namaste-ristorante/
+├── src/
+│   ├── app/                    # Next.js pages
+│   │   ├── page.tsx           # Home with FluidReveal hero
+│   │   ├── menu/              # Menu page
+│   │   ├── cart/              # Shopping cart
+│   │   ├── checkout/          # Checkout flow
+│   │   ├── order-confirmation/# Order success
+│   │   └── api/               # API routes
+│   ├── components/
+│   │   ├── ui/                # FluidReveal, Button, Input
+│   │   ├── menu/              # MenuItem, MenuGrid, CategoryFilter
+│   │   ├── cart/              # CartItem, CartSummary
+│   │   ├── checkout/          # CheckoutForm
+│   │   └── layout/            # Header, Footer
+│   ├── contexts/              # CartContext, ThemeContext
+│   ├── data/                  # Menu data (12 categories)
+│   └── types/                 # TypeScript definitions
+├── public/                    # Static assets
+└── tailwind.config.ts         # Custom design tokens
 ```
 
-## Features
-
-- **Menu Display**: View the restaurant's menu with categories and items.
-- **Cart Functionality**: Add items to the cart, view cart contents, and modify selections.
-- **Checkout Process**: Enter user details and confirm orders.
-- **Order Management**: Admin page to view recent orders from Supabase.
-- **Notifications**: Receive order notifications via WhatsApp.
-
-## Getting Started
+## 🚀 Getting Started
 
 1. **Clone the repository**:
-   ```
-   git clone <repository-url>
-   cd apna-punjab-pizza-kebap
+   ```bash
+   git clone https://github.com/krishanu8219/namaste-ristorante.git
+   cd namaste-ristorante
    ```
 
 2. **Install dependencies**:
-   ```
+   ```bash
    npm install
    ```
 
 3. **Set up environment variables**:
-   - Copy `.env.local.example` to `.env.local` and fill in the required values.
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   Fill in:
+   - `RESEND_API_KEY` - For order confirmation emails
+   - `RESTAURANT_EMAIL` - Email to receive orders
+   - `TELEGRAM_BOT_TOKEN` - For Telegram notifications (optional)
+   - `TELEGRAM_CHAT_ID` - Telegram chat ID (optional)
 
 4. **Run the development server**:
-   ```
+   ```bash
    npm run dev
    ```
 
-5. **Open your browser**:
-   Navigate to `http://localhost:3000` to view the application.
+5. **Open** [http://localhost:3000](http://localhost:3000)
 
-## Contributing
+## 📍 Restaurant Info
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
+**NAMASTE Ristorante**  
+Corso Monte Cucco 26 B  
+10139 Torino, Italy  
+📞 +39 011 796 579  
+🕐 Ordini: 18:00 - 22:00
 
-## License
+## 📜 Menu Categories
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+| Category | Items |
+|----------|-------|
+| Antipasti - Snacks | 4 |
+| Griglia - Grill | 4 |
+| Pollo | 7 |
+| Agnello | 4 |
+| Gamberi | 2 |
+| Verdure e Legumi | 8 |
+| Focacce e Pane | 6 |
+| Riso - Biryani | 3 |
+| Dolci | 4 |
+| Bevande | 4 |
+| Birre | 5 |
+| Vini | 6 |
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
+
+---
+
+Made with 💛 and lots of spices! 🌶️
