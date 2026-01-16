@@ -4,6 +4,8 @@ import React from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useCart } from '@/contexts/CartContext';
+import IconicDishes from '@/components/home/IconicDishes';
+import FadeIn from '@/components/animations/FadeIn';
 
 const ChefFavoritesPage = () => {
     const { dispatch } = useCart();
@@ -57,7 +59,7 @@ const ChefFavoritesPage = () => {
 
             {/* Hero Section */}
             <section className="relative">
-                <div className="relative h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden py-20">
+                <div className="relative h-[120px] md:h-[150px] flex items-center justify-center overflow-hidden py-8">
                     {/* Background Image */}
                     <div
                         className="absolute inset-0 z-0"
@@ -69,10 +71,10 @@ const ChefFavoritesPage = () => {
                     />
                     {/* Hero Content */}
                     <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-                        <h1 className="font-serif text-3xl md:text-5xl text-white mb-4 drop-shadow-lg font-bold leading-tight">
+                        <h1 className="font-serif text-xl md:text-3xl text-white mb-2 drop-shadow-lg font-bold leading-tight">
                             I Preferiti dello Chef - Un Viaggio di Sapori Autentici
                         </h1>
-                        <p className="text-white text-lg md:text-xl font-light drop-shadow-lg">
+                        <p className="text-white text-sm md:text-base font-light drop-shadow-lg">
                             Scopri i piatti tradizionali più amati, scelti personalmente dal nostro Chef per il vostro piacere.
                         </p>
                     </div>
@@ -80,88 +82,49 @@ const ChefFavoritesPage = () => {
             </section>
 
             {/* Main Content / Specialties */}
-            <main className="py-12 md:py-16">
-                <div className="container mx-auto px-4">
-                    {/* Section Title */}
-                    <h2 className="text-center font-serif text-3xl md:text-4xl text-deep-red mb-12 font-bold">
-                        Le Nostre Specialità
-                    </h2>
+            <main>
+                {/* Iconic Dishes Section with Hover Effects */}
+                <FadeIn>
+                    <IconicDishes />
+                </FadeIn>
 
-                    {/* Menu Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16 max-w-6xl mx-auto">
-                        {specialties.map((item) => (
-                            <article
-                                key={item.id}
-                                className="flex flex-col md:flex-row bg-medium-red rounded-xl overflow-hidden shadow-xl h-auto md:h-64 group"
-                            >
-                                <div className="relative overflow-hidden md:w-2/5">
-                                    <img
-                                        alt={item.name}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                        src={item.image}
-                                    />
-                                </div>
-                                <div className="p-6 flex-1 flex flex-col justify-center text-white relative">
-                                    {/* Corner Decoration */}
-                                    <div className="absolute top-0 right-0 p-2 opacity-20">
-                                        <svg className="w-10 h-10 text-gold-accent" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 2L2 22h20L12 2z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="font-serif text-xl font-bold mb-2">{item.name}</h3>
-                                    <p className="text-gray-300 text-sm mb-4 leading-relaxed">
-                                        {item.description}
-                                    </p>
-                                    <div className="mt-auto flex items-center justify-between">
-                                        <span className="text-gold-accent text-2xl font-bold font-serif">
-                                            €{item.price.toFixed(2)}
-                                        </span>
-                                        <button
-                                            onClick={() => handleAddToCart(item)}
-                                            className="bg-gold-accent text-medium-red text-xs font-bold py-1.5 px-4 rounded hover:bg-yellow-600 transition-colors"
-                                        >
-                                            Aggiungi
-                                        </button>
-                                    </div>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-
+                <div className="container mx-auto px-4 pb-16">
                     {/* Chef Section */}
-                    <section className="max-w-5xl mx-auto mt-12">
-                        <div
-                            className="rounded-xl overflow-hidden shadow-lg border border-gold-accent relative"
-                            style={{ backgroundColor: '#F9E4B7' }}
-                        >
-                            {/* Ornamental Corners */}
-                            <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-medium-red rounded-tl-xl pointer-events-none opacity-20"></div>
-                            <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-medium-red rounded-br-xl pointer-events-none opacity-20"></div>
+                    <FadeIn delay={0.2}>
+                        <section className="max-w-5xl mx-auto mt-12">
+                            <div
+                                className="rounded-xl overflow-hidden shadow-lg border border-gold-accent relative"
+                                style={{ backgroundColor: '#F9E4B7' }}
+                            >
+                                {/* Ornamental Corners */}
+                                <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-medium-red rounded-tl-xl pointer-events-none opacity-20"></div>
+                                <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-medium-red rounded-br-xl pointer-events-none opacity-20"></div>
 
-                            <div className="flex flex-col md:flex-row">
-                                {/* Chef Image */}
-                                <div className="md:w-1/3 h-64 md:h-auto relative">
-                                    <img
-                                        alt="Chef Rajesh Kumar"
-                                        className="w-full h-full object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc6umUm1mCHUIsYnUIDCFj0RMfK482kqoaE3iFSmKw0_nSgUvp5hhwno16iBuC-NQgRfGu9_7ms2sauJqno6ZpOemQVzXWpLWi5OVG1T8w_BcIOdeH0JFGBA5p_VBwXdDYDbHTnePF66WOTJbRSquZEsUeZUwufPAgxDzom20me1DOkSrgLSyuAKaunoAJKDewE472g75fS9MXDd1qe23Wqp-RDhDe7jqMHWsKRH-2AiNr8uwEcRemDxjlSRoVQ5CBrLqrqUH8c7Yz"
-                                    />
-                                </div>
-                                {/* Chef Content */}
-                                <div className="md:w-2/3 p-8 md:p-12 flex flex-col justify-center">
-                                    <h3 className="font-serif text-2xl md:text-3xl font-bold text-deep-red mb-4">
-                                        La Parola dello Chef - L&apos;Anima della Nostra Cucina
-                                    </h3>
-                                    <blockquote className="text-deep-red/80 italic text-lg leading-relaxed mb-6 font-serif">
-                                        &quot;La cucina indiana è una celebrazione di spezie, storia e famiglia. Ogni piatto che servo è un omaggio alle mie radici. Spero che questi sapori vi portino gioia e calore, proprio come in India.&quot;
-                                    </blockquote>
-                                    <div className="text-medium-red font-bold text-lg text-right">
-                                        - Chef Rajesh Kumar.
+                                <div className="flex flex-col md:flex-row">
+                                    {/* Chef Image */}
+                                    <div className="md:w-1/3 h-64 md:h-auto relative">
+                                        <img
+                                            alt="Chef Rajesh Kumar"
+                                            className="w-full h-full object-cover"
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc6umUm1mCHUIsYnUIDCFj0RMfK482kqoaE3iFSmKw0_nSgUvp5hhwno16iBuC-NQgRfGu9_7ms2sauJqno6ZpOemQVzXWpLWi5OVG1T8w_BcIOdeH0JFGBA5p_VBwXdDYDbHTnePF66WOTJbRSquZEsUeZUwufPAgxDzom20me1DOkSrgLSyuAKaunoAJKDewE472g75fS9MXDd1qe23Wqp-RDhDe7jqMHWsKRH-2AiNr8uwEcRemDxjlSRoVQ5CBrLqrqUH8c7Yz"
+                                        />
+                                    </div>
+                                    {/* Chef Content */}
+                                    <div className="md:w-2/3 p-8 md:p-12 flex flex-col justify-center">
+                                        <h3 className="font-serif text-2xl md:text-3xl font-bold text-deep-red mb-4">
+                                            La Parola dello Chef - L&apos;Anima della Nostra Cucina
+                                        </h3>
+                                        <blockquote className="text-deep-red/80 italic text-lg leading-relaxed mb-6 font-serif">
+                                            &quot;La cucina indiana è una celebrazione di spezie, storia e famiglia. Ogni piatto che servo è un omaggio alle mie radici. Spero che questi sapori vi portino gioia e calore, proprio come in India.&quot;
+                                        </blockquote>
+                                        <div className="text-medium-red font-bold text-lg text-right">
+                                            - Chef Rajesh Kumar.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </FadeIn>
                 </div>
             </main>
 
