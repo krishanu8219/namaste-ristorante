@@ -4,3 +4,7 @@ node_modules
 .env.local
 .env
 .env.*.local
+
+# Lock files to ignore (using pnpm)
+package-lock.json
+yarn.lock
