@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
         {/* Logo Section */}
         <div className="flex flex-col items-center md:items-start justify-center">
-          <div className="relative w-40 h-40 mb-4">
+          <div className="relative w-80 h-80 mb-4">
             <img
               src="/namaste-logo.png"
               alt="Namaste Ristorante Logo"
