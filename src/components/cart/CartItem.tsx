@@ -13,16 +13,10 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { dispatch } = useCart();
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between py-6 gap-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between py-6 gap-4 border-b border-dotted border-gray-300 last:border-0">
       <div className="flex items-center gap-4 flex-1">
         {item.image && (
-          <div
-            className="relative w-20 h-20 overflow-hidden flex-shrink-0 border-2 border-ink"
-            style={{
-              borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-              boxShadow: '3px 3px 0px rgba(45, 27, 14, 0.5)',
-            }}
-          >
+          <div className="relative w-24 h-24 overflow-hidden flex-shrink-0 rounded-lg border-2 border-gold-accent/30 shadow-md">
             <Image
               src={item.image}
               alt={item.name}
@@ -32,54 +26,43 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           </div>
         )}
         <div>
-          <h3 className="font-display font-bold text-ink text-lg mb-1">{item.name}</h3>
-          <p className="text-sm font-body text-ink/60">€{item.price.toFixed(2)} cadauno</p>
+          <h3 className="font-serif font-bold text-deep-red text-xl mb-1">{item.name}</h3>
+          <p className="text-sm font-body text-gray-600">€{item.price.toFixed(2)} cadauno</p>
         </div>
       </div>
 
       <div className="flex items-center justify-between sm:justify-end gap-6">
-        <div
-          className="flex items-center bg-cream p-1 border-2 border-ink"
-          style={{
-            borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-            boxShadow: '2px 2px 0px rgba(45, 27, 14, 0.4)',
-          }}
-        >
+        {/* Quantity Controls */}
+        <div className="flex items-center bg-beige-sidebar rounded-full border border-gold-accent/30 shadow-sm">
           <button
             onClick={() => dispatch({ type: 'DECREMENT_ITEM', payload: { id: item.id } })}
-            className="w-9 h-9 bg-white text-ink hover:bg-turmeric-100 flex items-center justify-center transition-all font-display font-bold text-lg border border-ink/30"
-            style={{ borderRadius: '15px 5px 15px 5px' }}
+            className="w-10 h-10 text-medium-red hover:bg-gold-accent hover:text-white flex items-center justify-center transition-all font-bold text-xl rounded-l-full"
           >
             −
           </button>
-          <span className="w-12 text-center font-display font-bold text-ink text-lg">{item.quantity}</span>
+          <span className="w-12 text-center font-serif font-bold text-deep-red text-lg">{item.quantity}</span>
           <button
             onClick={() => dispatch({ type: 'INCREMENT_ITEM', payload: { id: item.id } })}
-            className="w-9 h-9 bg-saffron-500 text-white hover:bg-saffron-600 flex items-center justify-center transition-all font-display font-bold text-lg border border-ink/30"
-            style={{ borderRadius: '5px 15px 5px 15px' }}
+            className="w-10 h-10 bg-gold-accent text-white hover:bg-medium-red flex items-center justify-center transition-all font-bold text-xl rounded-r-full"
           >
             +
           </button>
         </div>
 
+        {/* Price and Remove */}
         <div className="flex items-center gap-4">
-          <span
-            className="bg-turmeric-400 text-ink font-display font-bold px-4 py-1.5 border-2 border-ink"
-            style={{
-              borderRadius: '4px 20px 4px 20px',
-              boxShadow: '2px 2px 0px rgba(45, 27, 14, 0.5)',
-            }}
-          >
+          <span className="bg-gold-accent/10 text-medium-red font-serif font-bold px-4 py-2 rounded border border-gold-accent/30">
             €{(item.price * item.quantity).toFixed(2)}
           </span>
 
           <button
             onClick={() => dispatch({ type: 'REMOVE_ITEM', payload: { id: item.id } })}
-            className="text-ink/50 hover:text-masala-600 transition-all p-2 hover:bg-masala-50 border-2 border-transparent hover:border-ink/30"
-            style={{ borderRadius: '50%' }}
+            className="text-gray-400 hover:text-red-600 transition-all p-2 hover:bg-red-50 rounded-full"
             title="Rimuovi articolo"
           >
-            <span className="text-xl">🗑️</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
           </button>
         </div>
       </div>

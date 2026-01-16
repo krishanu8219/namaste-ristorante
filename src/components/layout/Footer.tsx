@@ -1,177 +1,72 @@
 import React from 'react';
+import Link from 'next/link';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative bg-ink text-cream overflow-hidden">
-      {/* Wavy top border */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
-        <svg viewBox="0 0 1200 60" className="w-full h-16 fill-cream">
-          <path d="M0 30 Q 150 0 300 30 T 600 30 T 900 30 T 1200 30 L 1200 0 L 0 0 Z" />
-        </svg>
-      </div>
-
-      {/* Decorative floating elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 left-10 text-4xl opacity-20 animate-float">✨</div>
-        <div className="absolute top-40 right-20 text-3xl opacity-20 animate-float" style={{ animationDelay: '1s' }}>🌿</div>
-        <div className="absolute bottom-40 left-1/4 text-5xl opacity-10 animate-wiggle-slow">🍛</div>
-        <div className="absolute bottom-20 right-1/4 text-4xl opacity-15 animate-float" style={{ animationDelay: '0.5s' }}>🌶️</div>
-      </div>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-
-          {/* Brand Section */}
-          <div className="text-center md:text-left">
-            <div className="inline-block mb-6">
-              <h3 className="font-display text-4xl font-bold text-saffron-400 animate-wiggle-slow">
-                NAMASTE
-              </h3>
-              <p className="font-accent text-2xl text-turmeric-300 -mt-1 transform -rotate-2">
-                Ristorante ✨
-              </p>
-            </div>
-            <p className="font-body text-cream/80 leading-relaxed max-w-xs mx-auto md:mx-0">
-              Where every dish tells a story of tradition, love, and the magic of Indian spices.
-              <span className="font-accent text-lg text-saffron-300"> Made with heart! 💛</span>
-            </p>
-
-            {/* Social doodles */}
-            <div className="flex justify-center md:justify-start space-x-4 mt-6">
-              {['📸', '📱', '💬'].map((emoji, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-12 h-12 bg-charcoal hover:bg-saffron-600 flex items-center justify-center text-xl transition-all duration-200 border-2 border-cream/30 hover:border-cream hover:scale-110 hover:rotate-6"
-                  style={{
-                    borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
-                  }}
-                >
-                  {emoji}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact Section */}
-          <div>
-            <h4 className="font-display text-xl font-bold text-turmeric-300 mb-6 flex items-center space-x-2">
-              <span className="text-2xl">📍</span>
-              <span className="hand-underline">Find Us</span>
-            </h4>
-
-            <div className="space-y-4">
-              {/* Address Card */}
-              <div className="bg-charcoal/50 p-4 border-2 border-cream/20 hover:border-saffron-400 transition-all group"
-                style={{
-                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                }}>
-                <div className="flex items-start space-x-3">
-                  <span className="text-2xl group-hover:animate-wiggle">🏠</span>
-                  <div>
-                    <p className="font-body text-cream">Corso Monte Cucco 26 B</p>
-                    <p className="font-body text-cream/70">10139 Torino, Italy</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Phone Card */}
-              <a href="tel:+39011796579"
-                className="block bg-charcoal/50 p-4 border-2 border-cream/20 hover:border-cardamom-400 transition-all group"
-                style={{
-                  borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-                }}>
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl group-hover:animate-wiggle">📞</span>
-                  <span className="font-display font-bold text-cream group-hover:text-cardamom-300 transition-colors">
-                    +39 011 796 579
-                  </span>
-                </div>
-              </a>
-
-              {/* Email Card */}
-              <a href="mailto:ciao@namaste.it"
-                className="block bg-charcoal/50 p-4 border-2 border-cream/20 hover:border-turmeric-400 transition-all group"
-                style={{
-                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                }}>
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl group-hover:animate-wiggle">✉️</span>
-                  <span className="font-body text-cream group-hover:text-turmeric-300 transition-colors">
-                    ciao@namaste.it
-                  </span>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          {/* Hours Section */}
-          <div>
-            <h4 className="font-display text-xl font-bold text-turmeric-300 mb-6 flex items-center space-x-2">
-              <span className="text-2xl">🕐</span>
-              <span className="hand-underline">Opening Hours</span>
-            </h4>
-
-            <div className="bg-charcoal/50 p-6 border-2 border-cream/20"
-              style={{
-                borderRadius: '30px 4px 30px 4px',
-                boxShadow: '4px 4px 0px rgba(249, 115, 22, 0.3)',
-              }}>
-              <div className="space-y-4">
-                {[
-                  { days: 'Ordini Locali', hours: '18:00 - 22:00', emoji: '🍽️' },
-                ].map((schedule, i) => (
-                  <div key={i} className="flex justify-between items-center py-2 border-b border-cream/10 last:border-0">
-                    <div className="flex items-center space-x-2">
-                      <span>{schedule.emoji}</span>
-                      <span className="font-body text-cream/90">{schedule.days}</span>
-                    </div>
-                    <span className="font-display font-bold text-saffron-400">{schedule.hours}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 pt-4 border-t-2 border-dashed border-cream/20 text-center">
-                <span className="inline-block bg-cardamom-500 text-white px-4 py-2 font-display font-bold text-sm border-2 border-cream/30"
-                  style={{
-                    borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                  }}>
-                  ✓ 100% Halal
-                </span>
-              </div>
-            </div>
-          </div>
+    <footer className="bg-deep-red text-white py-12 border-t border-gold-accent">
+      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        {/* Contact Info */}
+        <div>
+          <h5 className="font-serif text-2xl text-gold-accent mb-4">Contattaci</h5>
+          <p className="mb-2">
+            <svg className="inline w-5 h-5 mr-2 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Corso Monte Cucco 26 B, Torino
+          </p>
+          <p className="mb-2">
+            <svg className="inline w-5 h-5 mr-2 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            +39 011 796 579
+          </p>
+          <p className="mb-2">
+            <svg className="inline w-5 h-5 mr-2 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            info@namaste-torino.it
+          </p>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t-2 border-dashed border-cream/20">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="font-body text-cream/60 text-sm">
-              © {new Date().getFullYear()} NAMASTE Ristorante.
-              <span className="font-accent text-lg ml-2">Made with 💛 & lots of spices!</span>
-            </p>
+        {/* Opening Hours */}
+        <div>
+          <h5 className="font-serif text-2xl text-gold-accent mb-4">Orari</h5>
+          <p className="mb-1">Pranzo: 12:00 - 15:00</p>
+          <p className="mb-1">Cena: 19:00 - 23:00</p>
+          <p className="text-sm text-gray-400 mt-2">Chiuso il Lunedì a pranzo</p>
+        </div>
 
-            <div className="flex items-center space-x-2">
-              <span className="font-accent text-cream/60">designed by an indie artist</span>
-              <span className="text-xl animate-wiggle-slow">🎨</span>
-            </div>
+        {/* Social */}
+        <div className="flex flex-col items-center md:items-start">
+          <h5 className="font-serif text-2xl text-gold-accent mb-4">Seguici</h5>
+          <div className="flex gap-4">
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full border border-gold-accent flex items-center justify-center hover:bg-gold-accent hover:text-deep-red transition-all"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+              </svg>
+            </a>
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full border border-gold-accent flex items-center justify-center hover:bg-gold-accent hover:text-deep-red transition-all"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </a>
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full border border-gold-accent flex items-center justify-center hover:bg-gold-accent hover:text-deep-red transition-all"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              </svg>
+            </a>
           </div>
-
-          {/* Decorative bottom illustration */}
-          <div className="flex justify-center mt-8 space-x-2 opacity-40">
-            {['🍛', '🌶️', '🍃', '✨', '🥘', '🧅', '🌿', '🍚'].map((emoji, i) => (
-              <span
-                key={i}
-                className="text-2xl"
-                style={{
-                  animationDelay: `${i * 0.2}s`,
-                  transform: `rotate(${(i % 2 === 0 ? 1 : -1) * 10}deg)`,
-                }}
-              >
-                {emoji}
-              </span>
-            ))}
-          </div>
+          <p className="mt-4 text-xs text-gray-400">© {new Date().getFullYear()} Namaste Restaurant. All rights reserved.</p>
         </div>
       </div>
     </footer>

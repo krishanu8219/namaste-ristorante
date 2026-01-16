@@ -208,6 +208,48 @@
     right: -10px;
     transform: rotate(135deg);
   }
+
+  /* Italian Restaurant Design Utilities */
+  .hero-overlay {
+    background: linear-gradient(90deg, #5C1919 0%, rgba(92, 25, 25, 0.95) 40%, rgba(92, 25, 25, 0.4) 70%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .decorative-strip {
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDgD9EQKWegtTB4sZl1v2QRYCuS6sSxxEnXu62KHtj-Yij0Vmi4UiCe5ebX13A9h8qompjxNC-ay8olsKHBUbF6LUwa84Inye0YcmjiYRjTSQ3vH9pk4Q6wv0JEwmxWf5aJSwWBDAg78Kc9VHxHJWAjAJpwuI2EFL7d-_XdZ1lakufJkRm_yYZylqU4B1d3XOojlkVx36BWh_lBgnrSyeA5e48NcXYGWDnHElwGycxQIxGr2QYfwHPtrm3Psnoksi9qFre90udBeEwH');
+    background-repeat: repeat-x;
+    background-position: center;
+    background-size: contain;
+  }
+
+  .mandala-watermark {
+    background-image: radial-gradient(circle at 50% 50%, rgba(193, 157, 96, 0.05) 0%, transparent 60%), url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 C22.4 0 0 22.4 0 50 C0 77.6 22.4 100 50 100 C77.6 100 100 77.6 100 50 C100 22.4 77.6 0 50 0 Z M50 90 C27.9 90 10 72.1 10 50 C10 27.9 27.9 10 50 10 C72.1 10 90 27.9 90 50 C90 72.1 72.1 90 50 90 Z' fill='%23C19D60' fill-opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  .paper-texture {
+    background-color: transparent;
+  }
+
+  .shadow-premium {
+    box-shadow: 0 25px 50px -12px rgba(89, 28, 28, 0.25);
+  }
+
+  .ornament-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0 1.5rem;
+    color: #591C1C;
+  }
+
+  .ornament-divider::before,
+  .ornament-divider::after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: 40px;
+    background-color: #C59D5F;
+    margin: 0 10px;
+  }
 }
 
 @layer components {

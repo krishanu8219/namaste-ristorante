@@ -3,13 +3,34 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   darkMode: 'class',
   content: [
-    './src/**/*.{js,ts,jsx,tsx}', 
+    './src/**/*.{js,ts,jsx,tsx}',
     './public/index.html'
   ],
   theme: {
     extend: {
       colors: {
-        // Warm, spicy Indian palette - Indie Artist Style
+        // Premium Fine Dining Colors
+        'deep-burgundy': '#2D0A0A',
+        'rich-burgundy': '#4A1515',
+        'warm-burgundy': '#6B2020',
+        'champagne-gold': '#D4AF37',
+        'antique-gold': '#C9A227',
+        'soft-gold': '#E8D5A3',
+        'ivory': '#FFFEF7',
+        'pearl': '#FAF8F5',
+        'charcoal': '#1A1A1A',
+        'graphite': '#2D2D2D',
+        // Legacy colors (keeping for compatibility)
+        'deep-red': '#4A1212',
+        'medium-red': '#5C1919',
+        'gold-accent': '#C59D5F',
+        'cream-bg': '#FFF8E7',
+        'beige-sidebar': '#F5EDC8',
+        'namaste-maroon': '#591C1C',
+        'namaste-gold': '#C19D60',
+        'namaste-cream': '#fdfbf7',
+        'namaste-dark': '#1a1a1a',
+        // Spice palette
         turmeric: {
           50: '#FFFBEB',
           100: '#FFF3C4',
@@ -61,19 +82,22 @@ const config: Config = {
         cream: '#FDF8F3',
         parchment: '#F5E6D3',
         ink: '#2D1B0E',
-        charcoal: '#3D2914',
       },
       fontFamily: {
-        display: ['var(--font-fredoka)', 'Baloo 2', 'sans-serif'],
-        body: ['var(--font-nunito)', 'Comic Neue', 'sans-serif'],
-        accent: ['var(--font-caveat)', 'Patrick Hand', 'cursive'],
-        heading: ['var(--font-fredoka)', 'Baloo 2', 'sans-serif'],
+        // Premium typography with CSS variables
+        display: ['var(--font-cormorant)', 'Cormorant Garamond', 'var(--font-playfair)', 'Playfair Display', 'serif'],
+        body: ['var(--font-montserrat)', 'Montserrat', 'var(--font-lato)', 'Lato', 'sans-serif'],
+        accent: ['var(--font-cormorant)', 'Cormorant', 'var(--font-caveat)', 'cursive'],
+        heading: ['var(--font-cormorant)', 'Cormorant Garamond', 'var(--font-playfair)', 'Playfair Display', 'serif'],
+        serif: ['var(--font-cormorant)', 'Cormorant Garamond', 'var(--font-playfair)', 'Playfair Display', 'serif'],
+        elegant: ['var(--font-cormorant)', 'Cormorant Garamond', 'Georgia', 'serif'],
       },
       borderRadius: {
         'blob': '30% 70% 70% 30% / 30% 30% 70% 70%',
         'blob-2': '60% 40% 30% 70% / 60% 30% 70% 40%',
         'blob-3': '40% 60% 60% 40% / 70% 30% 30% 70%',
         'sketchy': '255px 15px 225px 15px / 15px 225px 15px 255px',
+        'arch': '100px 100px 0 0',
         '4xl': '2rem',
       },
       boxShadow: {
@@ -82,7 +106,10 @@ const config: Config = {
         'sketchy-xl': '8px 8px 0px rgba(45, 27, 14, 0.8)',
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
         'glow': '0 0 40px rgba(249, 115, 22, 0.3)',
+        'glow-gold': '0 0 40px rgba(212, 175, 55, 0.3)',
         'inner-sketch': 'inset 2px 2px 0px rgba(45, 27, 14, 0.3)',
+        'premium': '0 25px 50px -12px rgba(45, 10, 10, 0.25)',
+        'luxury': '0 20px 60px -15px rgba(45, 10, 10, 0.35)',
       },
       animation: {
         'wiggle': 'wiggle 0.5s ease-in-out infinite',
@@ -92,6 +119,10 @@ const config: Config = {
         'spin-slow': 'spin 8s linear infinite',
         'blob': 'blob 7s ease-in-out infinite',
         'squiggle': 'squiggle 0.3s ease-in-out',
+        'fade-up': 'fadeUp 0.8s ease-out forwards',
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'shimmer': 'shimmer 2s ease-in-out infinite',
+        'scale-in': 'scaleIn 0.5s ease-out forwards',
       },
       keyframes: {
         wiggle: {
@@ -114,9 +145,28 @@ const config: Config = {
           '25%': { transform: 'translateX(-3px) rotate(-1deg)' },
           '75%': { transform: 'translateX(3px) rotate(1deg)' },
         },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
       },
       backgroundImage: {
         'paper-texture': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+        'mandala-pattern': "radial-gradient(circle at 50% 50%, rgba(193, 157, 96, 0.05) 0%, transparent 60%)",
+        'gold-gradient': 'linear-gradient(135deg, #D4AF37 0%, #C9A227 50%, #E8D5A3 100%)',
+        'burgundy-gradient': 'linear-gradient(135deg, #2D0A0A 0%, #4A1515 50%, #6B2020 100%)',
       },
     },
   },

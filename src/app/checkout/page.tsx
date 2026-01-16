@@ -25,68 +25,59 @@ export default function CheckoutPage() {
   const total = calculateTotal(state.items);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8ThA0_URR8glx1EvVT9FRTwgbUvOl6FwFwk0DXFKQI2XVntOnXWGFfIRB_wq0SRwLZgCYd-d71a8LZkqHp6GPXlbmDyGcbe_r4auOKv1ArxIFq_00fZ44abwQJTEVv_1bHtXbx9fAfru8Jt1QuvN0FecOxUOARSC9-wL8txoznplmq6jUnCOOeNfeEd2OygoxB-8Gbc1-Plefs3OBiTB9CZ5DfhbaumvaUmw4EFvJQuQfMVu1gPeARe8J94QALM8bMF_GiYVYDup')", backgroundRepeat: "repeat" }}>
       <Header />
-      <main className="flex-1 bg-gradient-to-br from-cream via-turmeric-50 to-parchment relative overflow-hidden py-12 sm:py-16">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-saffron-200/20 blob-shape animate-blob" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-masala-200/10 blob-shape-2 animate-blob" style={{ animationDelay: '4s' }} />
-        <div className="absolute top-1/4 right-10 text-4xl opacity-10 animate-float">📝</div>
-
+      <main className="flex-1 py-12 sm:py-16 bg-cream-bg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-10 animate-fade-in">
-              <span className="font-accent text-xl text-masala-500 block mb-2">
-                ultimo passo! ✨
-              </span>
-              <h1 className="section-title">
-                📋 Completa l&apos;ordine 📋
+            {/* Page Header */}
+            <div className="text-center mb-12 animate-fade-in">
+              <div className="ornament-divider mb-4">
+                <span className="text-2xl">★</span>
+              </div>
+              <h1 className="font-serif text-4xl sm:text-5xl font-bold text-deep-red mb-3">
+                Completa l&apos;Ordine
               </h1>
+              <p className="text-gray-600 font-body">
+                Inserisci i tuoi dettagli per completare l&apos;ordine
+              </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Checkout Form */}
               <div className="lg:col-span-2">
                 <CheckoutForm />
               </div>
 
+              {/* Order Summary */}
               <div className="lg:col-span-1">
-                <div
-                  className="bg-white p-6 sticky top-24 border-3 border-ink"
-                  style={{
-                    borderRadius: '30px 4px 30px 4px',
-                    boxShadow: '6px 6px 0px rgba(45, 27, 14, 0.7)',
-                  }}
-                >
-                  {/* Decorative tape */}
-                  <div className="absolute -top-3 left-6 w-14 h-5 bg-turmeric-300/60 transform -rotate-3" style={{ borderRadius: '2px' }} />
+                <div className="bg-white p-6 sticky top-24 rounded-xl shadow-premium border border-gold-accent/20">
+                  {/* Ornamental Corner */}
+                  <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-gold-accent/20 rounded-tr-xl pointer-events-none"></div>
 
-                  <h3 className="font-display text-xl font-bold text-ink mb-6 flex items-center">
-                    <span className="mr-2">🧾</span>
+                  <h3 className="font-serif text-2xl font-bold text-deep-red mb-6 pb-4 border-b-2 border-dotted border-gray-300">
                     Riepilogo Ordine
                   </h3>
+
                   <ul className="space-y-4 mb-6">
                     {state.items.map((item) => (
-                      <li key={item.id} className="flex justify-between text-sm border-b-2 border-dashed border-ink/20 pb-3">
-                        <span className="font-body text-ink/80">
-                          <span className="font-display font-bold text-ink">{item.quantity}x</span> {item.name}
+                      <li key={item.id} className="flex justify-between text-sm border-b border-dotted border-gray-200 pb-3">
+                        <span className="font-body text-gray-700">
+                          <span className="font-serif font-bold text-medium-red">{item.quantity}x</span> {item.name}
                         </span>
-                        <span className="font-display font-bold text-ink">€{(item.quantity * item.price).toFixed(2)}</span>
+                        <span className="font-serif font-bold text-deep-red">€{(item.quantity * item.price).toFixed(2)}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="border-t-3 border-ink pt-6">
+
+                  <div className="border-t-2 border-deep-red pt-6">
                     <div className="flex justify-between items-end">
-                      <span className="text-lg font-display font-bold text-ink">Totale</span>
-                      <span
-                        className="bg-saffron-400 text-ink font-display font-bold text-xl px-4 py-2 border-2 border-ink"
-                        style={{
-                          borderRadius: '4px 20px 4px 20px',
-                          boxShadow: '3px 3px 0px rgba(45, 27, 14, 0.6)',
-                        }}
-                      >
+                      <span className="text-lg font-serif font-bold text-deep-red">Totale</span>
+                      <span className="bg-gold-accent text-white font-serif font-bold text-2xl px-5 py-2 rounded shadow-md">
                         €{total.toFixed(2)}
                       </span>
                     </div>
+                    <p className="text-sm text-gray-500 mt-3 text-right">IVA inclusa ✓</p>
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 {
-  "name": "apna-punjab-pizza-kebap",
+  "name": "namaste-ristorante",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@paypal/react-paypal-js": "^8.9.2",
+    "@stripe/stripe-js": "^8.6.0",
     "next": "^14.2.33",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "resend": "^6.5.2"
+    "resend": "^6.5.2",
+    "stripe": "^20.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

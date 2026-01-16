@@ -3,20 +3,30 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart, calculateTotal } from '@/contexts/CartContext';
-import { OrderFormData } from '@/types/order';
+import { OrderFormData, PaymentMethod } from '@/types/order';
+import PayPalButton from './PayPalButton';
+
+// Payment method configuration
+const paymentMethods: { value: PaymentMethod; label: string; description: string; sublabel?: string }[] = [
+  { value: 'stripe', label: 'Carta di Credito / Debito', description: 'Transazione sicura' },
+  { value: 'paypal', label: 'PayPal', description: 'Paga con PayPal' },
+  { value: 'satispay', label: 'Satispay', description: 'App di pagamento mobile' },
+  { value: 'cash', label: 'Contanti alla Consegna', description: 'Paga direttamente al fattorino' },
+];
 
 const CheckoutForm: React.FC = () => {
   const { state } = useCart();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [orderId, setOrderId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<OrderFormData>({
     customer_name: '',
     phone: '',
     email: '',
-    order_type: 'pickup',
-    payment_method: 'cash',
+    order_type: 'delivery',
+    payment_method: 'stripe',
     address: '',
     location_description: '',
   });
@@ -28,13 +38,10 @@ const CheckoutForm: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError('');
+  const total = calculateTotal(state.items);
 
-    const total = calculateTotal(state.items);
-
+  // Create order in backend
+  const createOrder = async (): Promise<string | null> => {
     const orderPayload = {
       customer_name: formData.customer_name,
       phone: formData.phone,
@@ -52,7 +59,132 @@ const CheckoutForm: React.FC = () => {
       total_price: total,
     };
 
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderPayload),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to place order');
+    }
+
+    return data.orderId;
+  };
+
+  // Handle Stripe payment
+  const handleStripePayment = async () => {
+    setIsSubmitting(true);
+    setError('');
+
     try {
+      const newOrderId = await createOrder();
+      if (!newOrderId) throw new Error('Failed to create order');
+
+      setOrderId(newOrderId);
+
+      const response = await fetch('/api/stripe/create-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: newOrderId,
+          items: state.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            unit_price: item.price,
+          })),
+          customerEmail: formData.email,
+          customerName: formData.customer_name,
+          totalPrice: total,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Payment failed');
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle Satispay payment
+  const handleSatispayPayment = async () => {
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const newOrderId = await createOrder();
+      if (!newOrderId) throw new Error('Failed to create order');
+
+      setOrderId(newOrderId);
+
+      const response = await fetch('/api/satispay/create-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: newOrderId,
+          totalPrice: total,
+          customerName: formData.customer_name,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create Satispay payment');
+      }
+
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Payment failed');
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle cash payment
+  const handleCashPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const orderPayload = {
+        customer_name: formData.customer_name,
+        phone: formData.phone,
+        email: formData.email,
+        order_type: formData.order_type,
+        payment_method: 'cash',
+        address: formData.address,
+        location_description: formData.location_description,
+        items: state.items.map(item => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          unit_price: item.price,
+        })),
+        total_price: total,
+      };
+
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
@@ -76,289 +208,262 @@ const CheckoutForm: React.FC = () => {
     }
   };
 
-  const total = calculateTotal(state.items);
+  // Handle PayPal success
+  const handlePayPalSuccess = async (transactionId: string) => {
+    router.push(`/payment/success?provider=paypal&order_id=${orderId}&transaction_id=${transactionId}`);
+  };
 
-  const inputStyles = {
-    borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (formData.payment_method === 'cash') {
+      await handleCashPayment(e);
+    } else if (formData.payment_method === 'stripe') {
+      await handleStripePayment();
+    } else if (formData.payment_method === 'satispay') {
+      await handleSatispayPayment();
+    }
+  };
+
+  const isFormValid = () => {
+    if (!formData.customer_name || !formData.phone || !formData.email) return false;
+    if (formData.order_type === 'delivery' && !formData.address) return false;
+    return state.items.length > 0;
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Contact Information */}
-      <div
-        className="bg-white p-6 sm:p-8 border-3 border-ink relative"
-        style={{
-          borderRadius: '30px 4px 30px 4px',
-          boxShadow: '6px 6px 0px rgba(45, 27, 14, 0.7)',
-        }}
-      >
-        {/* Decorative tape */}
-        <div className="absolute -top-3 left-8 w-16 h-5 bg-saffron-300/60 transform -rotate-3" style={{ borderRadius: '2px' }} />
-
-        <h2 className="font-display text-2xl font-bold text-ink mb-6 flex items-center">
-          <span className="mr-2">👤</span>
-          Informazioni di Contatto
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 font-display font-bold text-ink text-sm">Nome Completo *</label>
-            <input
-              type="text"
-              name="customer_name"
-              value={formData.customer_name}
-              onChange={handleChange}
-              required
-              placeholder="Mario Rossi"
-              className="px-4 py-3 bg-cream text-ink border-2 border-ink focus:ring-4 focus:ring-turmeric-200 transition-all font-body"
-              style={inputStyles}
-            />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Section 1: Delivery Method */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border-t-2 border-deep-red relative">
+        <div className="mandala-watermark absolute inset-0 opacity-20 pointer-events-none"></div>
+        <div className="p-3 md:p-4 relative z-10">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-deep-red text-gold-accent font-bold font-serif text-sm">1</span>
+            <h3 className="font-display text-lg font-bold text-deep-red">Metodo di Consegna</h3>
           </div>
-
-          <div className="flex flex-col">
-            <label className="mb-2 font-display font-bold text-ink text-sm">Numero di Telefono *</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              placeholder="+39 123 456 7890"
-              className="px-4 py-3 bg-cream text-ink border-2 border-ink focus:ring-4 focus:ring-turmeric-200 transition-all font-body"
-              style={inputStyles}
-            />
-          </div>
-
-          <div className="flex flex-col md:col-span-2">
-            <label className="mb-2 font-display font-bold text-ink text-sm">Email (per ricevuta) *</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="mario@email.com"
-              className="px-4 py-3 bg-cream text-ink border-2 border-ink focus:ring-4 focus:ring-turmeric-200 transition-all font-body"
-              style={inputStyles}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Order Type */}
-      <div
-        className="bg-white p-6 sm:p-8 border-3 border-ink relative"
-        style={{
-          borderRadius: '4px 30px 4px 30px',
-          boxShadow: '6px 6px 0px rgba(45, 27, 14, 0.7)',
-        }}
-      >
-        <div className="absolute -top-3 right-8 w-14 h-5 bg-turmeric-300/60 transform rotate-2" style={{ borderRadius: '2px' }} />
-
-        <h2 className="font-display text-2xl font-bold text-ink mb-6 flex items-center">
-          <span className="mr-2">📦</span>
-          Tipo di Ordine
-        </h2>
-
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <label
-            className={`
-              relative flex flex-col items-center justify-center p-5 cursor-pointer transition-all duration-200 border-3 border-ink
-              ${formData.order_type === 'pickup'
-                ? 'bg-cardamom-100 scale-[1.02]'
-                : 'bg-cream hover:bg-turmeric-50'}
-            `}
-            style={{
-              borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-              boxShadow: formData.order_type === 'pickup'
-                ? '4px 4px 0px rgba(45, 27, 14, 0.8)'
-                : '2px 2px 0px rgba(45, 27, 14, 0.4)',
-            }}
-          >
-            <input
-              type="radio"
-              name="order_type"
-              value="pickup"
-              checked={formData.order_type === 'pickup'}
-              onChange={handleChange}
-              className="sr-only"
-            />
-            <span className="text-3xl mb-2">🏪</span>
-            <span className="font-display font-bold text-ink">Ritiro in Sede</span>
-          </label>
-
-          <label
-            className={`
-              relative flex flex-col items-center justify-center p-5 cursor-pointer transition-all duration-200 border-3 border-ink
-              ${formData.order_type === 'delivery'
-                ? 'bg-saffron-100 scale-[1.02]'
-                : 'bg-cream hover:bg-turmeric-50'}
-            `}
-            style={{
-              borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-              boxShadow: formData.order_type === 'delivery'
-                ? '4px 4px 0px rgba(45, 27, 14, 0.8)'
-                : '2px 2px 0px rgba(45, 27, 14, 0.4)',
-            }}
-          >
-            <input
-              type="radio"
-              name="order_type"
-              value="delivery"
-              checked={formData.order_type === 'delivery'}
-              onChange={handleChange}
-              className="sr-only"
-            />
-            <span className="text-3xl mb-2">🚗</span>
-            <span className="font-display font-bold text-ink">Consegna a Casa</span>
-          </label>
-        </div>
-
-        {formData.order_type === 'delivery' && (
-          <div className="mb-6 animate-fade-in">
-            <label className="mb-2 font-display font-bold text-ink text-sm block">Indirizzo di Consegna *</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required={formData.order_type === 'delivery'}
-              placeholder="Via, numero civico, CAP, città"
-              className="w-full px-4 py-3 bg-cream text-ink border-2 border-ink focus:ring-4 focus:ring-turmeric-200 transition-all font-body"
-              style={inputStyles}
-            />
-          </div>
-        )}
-
-        <div className="flex flex-col">
-          <label className="mb-2 font-display font-bold text-ink text-sm">
-            Note Aggiuntive (opzionale) 📝
-          </label>
-          <textarea
-            name="location_description"
-            value={formData.location_description}
-            onChange={handleChange}
-            rows={3}
-            className="px-4 py-3 bg-cream text-ink border-2 border-ink focus:ring-4 focus:ring-turmeric-200 transition-all resize-none font-body"
-            style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px' }}
-            placeholder="Istruzioni speciali, allergie, preferenze..."
-          />
-        </div>
-      </div>
-
-      {/* Payment Method */}
-      <div
-        className="bg-white p-6 sm:p-8 border-3 border-ink relative"
-        style={{
-          borderRadius: '30px 4px 30px 4px',
-          boxShadow: '6px 6px 0px rgba(45, 27, 14, 0.7)',
-        }}
-      >
-        <div className="absolute -top-3 left-12 w-12 h-5 bg-cardamom-300/60 transform -rotate-1" style={{ borderRadius: '2px' }} />
-
-        <h2 className="font-display text-2xl font-bold text-ink mb-6 flex items-center">
-          <span className="mr-2">💳</span>
-          Metodo di Pagamento
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[
-            { value: 'cash', label: 'Contanti', emoji: '💵' },
-            { value: 'satispay', label: 'Satispay', emoji: '📱' },
-            { value: 'card', label: 'Carta/Bancomat', emoji: '💳' },
-          ].map((method) => (
-            <label
-              key={method.value}
-              className={`
-                relative flex flex-col items-center justify-center p-5 cursor-pointer transition-all duration-200 border-2 border-ink
-                ${formData.payment_method === method.value
-                  ? 'bg-cardamom-100 scale-[1.02]'
-                  : 'bg-cream hover:bg-turmeric-50'}
-              `}
-              style={{
-                borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                boxShadow: formData.payment_method === method.value
-                  ? '4px 4px 0px rgba(45, 27, 14, 0.8)'
-                  : '2px 2px 0px rgba(45, 27, 14, 0.4)',
-              }}
-            >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <label className="cursor-pointer group">
               <input
                 type="radio"
-                name="payment_method"
-                value={method.value}
-                checked={formData.payment_method === method.value}
+                name="order_type"
+                value="delivery"
+                checked={formData.order_type === 'delivery'}
                 onChange={handleChange}
-                className="sr-only"
+                className="peer sr-only"
               />
-              <span className="text-3xl mb-2">{method.emoji}</span>
-              <span className="font-display font-bold text-ink text-sm">{method.label}</span>
+              <div className="border-2 border-gray-200 peer-checked:border-deep-red peer-checked:bg-red-50 rounded-lg p-3 hover:border-gold-accent transition-all h-full flex flex-col items-center text-center">
+                <div className="w-4 h-4 rounded-full border-2 border-gray-300 peer-checked:border-deep-red mb-2 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-transparent peer-checked:bg-deep-red transition-colors"></div>
+                </div>
+                <svg className="w-7 h-7 text-gold-accent mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                </svg>
+                <span className="font-bold text-base text-gray-800">Consegna a Domicilio</span>
+                <span className="text-xs text-gray-500 mt-0.5">30-45 min</span>
+              </div>
             </label>
-          ))}
+            <label className="cursor-pointer group">
+              <input
+                type="radio"
+                name="order_type"
+                value="pickup"
+                checked={formData.order_type === 'pickup'}
+                onChange={handleChange}
+                className="peer sr-only"
+              />
+              <div className="border-2 border-gray-200 peer-checked:border-deep-red peer-checked:bg-red-50 rounded-lg p-3 hover:border-gold-accent transition-all h-full flex flex-col items-center text-center">
+                <div className="w-4 h-4 rounded-full border-2 border-gray-300 peer-checked:border-deep-red mb-2 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-transparent peer-checked:bg-deep-red transition-colors"></div>
+                </div>
+                <svg className="w-7 h-7 text-gold-accent mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span className="font-bold text-base text-gray-800">Ritiro al Ristorante</span>
+                <span className="text-xs text-gray-500 mt-0.5">Pronto in 20 min</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 2: Your Details */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border-t-2 border-deep-red relative">
+        <div className="p-3 md:p-4 relative z-10">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-deep-red text-gold-accent font-bold font-serif text-sm">2</span>
+            <h3 className="font-display text-lg font-bold text-deep-red">I Tuoi Dati</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-xs uppercase font-bold text-gray-500 tracking-wider" htmlFor="customer_name">Nome Completo</label>
+              <input
+                className="w-full rounded-md py-2 px-3 text-sm text-gray-800 border-gray-300 border focus:border-deep-red focus:ring-1 focus:ring-deep-red transition-all"
+                id="customer_name"
+                name="customer_name"
+                value={formData.customer_name}
+                onChange={handleChange}
+                placeholder="Mario Rossi"
+                required
+                type="text"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs uppercase font-bold text-gray-500 tracking-wider" htmlFor="phone">Telefono</label>
+              <input
+                className="w-full rounded-md py-2 px-3 text-sm text-gray-800 border-gray-300 border focus:border-deep-red focus:ring-1 focus:ring-deep-red transition-all"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="+39 333 1234567"
+                required
+                type="tel"
+              />
+            </div>
+            <div className="space-y-1 md:col-span-2">
+              <label className="text-xs uppercase font-bold text-gray-500 tracking-wider" htmlFor="email">Email</label>
+              <input
+                className="w-full rounded-md py-2 px-3 text-sm text-gray-800 border-gray-300 border focus:border-deep-red focus:ring-1 focus:ring-deep-red transition-all"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="mario.rossi@example.com"
+                required
+                type="email"
+              />
+            </div>
+          </div>
+
+          {formData.order_type === 'delivery' && (
+            <div className="mt-3 pt-3 border-t border-gray-100 animate-fade-in">
+              <h4 className="font-bold text-sm text-gray-700 mb-2 flex items-center gap-2">
+                <svg className="w-4 h-4 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Indirizzo di Consegna
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
+                <div className="md:col-span-6 space-y-1">
+                  <label className="text-xs uppercase font-bold text-gray-500 tracking-wider" htmlFor="address">Via / Piazza</label>
+                  <input
+                    className="w-full rounded-md py-2 px-3 text-sm text-gray-800 border-gray-300 border focus:border-deep-red focus:ring-1 focus:ring-deep-red transition-all"
+                    id="address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="Via Roma 10, 00100 Roma"
+                    required={formData.order_type === 'delivery'}
+                    type="text"
+                  />
+                </div>
+                <div className="md:col-span-6 space-y-1">
+                  <label className="text-xs uppercase font-bold text-gray-500 tracking-wider" htmlFor="location_description">Citofono / Note</label>
+                  <input
+                    className="w-full rounded-md py-2 px-3 text-sm text-gray-800 border-gray-300 border focus:border-deep-red focus:ring-1 focus:ring-deep-red transition-all"
+                    id="location_description"
+                    name="location_description"
+                    value={formData.location_description}
+                    onChange={handleChange}
+                    placeholder="Scala B, Int. 4"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Section 3: Payment */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border-t-2 border-deep-red relative">
+        <div className="p-3 md:p-4 relative z-10">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-deep-red text-gold-accent font-bold font-serif text-sm">3</span>
+            <h3 className="font-display text-lg font-bold text-deep-red">Pagamento</h3>
+          </div>
+          <div className="space-y-2">
+            {paymentMethods.map((method) => (
+              <label key={method.value} className="cursor-pointer group block">
+                <input
+                  type="radio"
+                  name="payment_method"
+                  value={method.value}
+                  checked={formData.payment_method === method.value}
+                  onChange={handleChange}
+                  className="peer sr-only"
+                />
+                <div className="border border-gray-200 peer-checked:border-deep-red peer-checked:bg-red-50 rounded-lg p-2.5 hover:border-gold-accent transition-all flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full border-2 border-gray-300 peer-checked:border-deep-red flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-transparent peer-checked:bg-deep-red transition-colors"></div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-sm text-gray-800">{method.label}</span>
+                      <span className="text-xs text-gray-500">{method.description}</span>
+                    </div>
+                  </div>
+                </div>
+              </label>
+            ))}
+          </div>
         </div>
       </div>
 
       {error && (
-        <div
-          className="bg-masala-100 border-3 border-ink text-ink px-6 py-4 flex items-center"
-          style={{
-            borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-            boxShadow: '4px 4px 0px rgba(45, 27, 14, 0.6)',
-          }}
-        >
-          <span className="text-2xl mr-3">⚠️</span>
-          <span className="font-body">{error}</span>
+        <div className="bg-red-50 border-l-4 border-red-500 text-red-800 px-4 py-3 rounded">
+          <p className="font-bold font-serif mb-1 text-sm">Errore</p>
+          <p className="font-body text-xs">{error}</p>
         </div>
       )}
 
-      {/* Submit Section */}
-      <div
-        className="bg-white p-6 sm:p-8 border-3 border-ink"
-        style={{
-          borderRadius: '4px 30px 4px 30px',
-          boxShadow: '6px 6px 0px rgba(45, 27, 14, 0.7)',
-        }}
-      >
-        <div className="flex justify-between items-center mb-6">
-          <span className="font-display text-xl font-bold text-ink">Totale da Pagare</span>
-          <span
-            className="bg-saffron-400 text-ink font-display font-bold text-2xl px-5 py-2 border-2 border-ink"
-            style={{
-              borderRadius: '4px 20px 4px 20px',
-              boxShadow: '3px 3px 0px rgba(45, 27, 14, 0.6)',
-            }}
-          >
-            €{total.toFixed(2)}
-          </span>
+      {/* PayPal Button */}
+      {formData.payment_method === 'paypal' && isFormValid() && (
+        <div className="bg-white rounded-lg shadow-md p-3">
+          <PayPalButton
+            orderId={orderId || 'pending'}
+            items={state.items.map(item => ({
+              id: item.id,
+              name: item.name,
+              quantity: item.quantity,
+              unit_price: item.price,
+            }))}
+            totalPrice={total}
+            customerName={formData.customer_name}
+            customerEmail={formData.email}
+            onSuccess={handlePayPalSuccess}
+            onError={(err) => setError(err)}
+            onCancel={() => setError('Pagamento annullato')}
+          />
         </div>
+      )}
 
+      {/* Submit Button */}
+      {formData.payment_method !== 'paypal' && (
         <button
           type="submit"
-          disabled={isSubmitting || state.items.length === 0}
+          disabled={isSubmitting || !isFormValid()}
           className={`
-            w-full px-8 py-5 font-display font-bold text-xl transition-all border-3 border-ink flex items-center justify-center gap-3
-            ${isSubmitting || state.items.length === 0
-              ? 'bg-ink/30 text-white cursor-not-allowed'
-              : 'bg-saffron-500 text-white hover:bg-saffron-600 hover:scale-[1.02]'
-            }
+            w-full py-3 rounded font-bold uppercase tracking-widest transition-colors shadow-lg flex items-center justify-center gap-2 group text-sm
+            ${isSubmitting || !isFormValid()
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-deep-red text-gold-accent hover:bg-red-900'}
           `}
-          style={{
-            borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-            boxShadow: isSubmitting ? 'none' : '5px 5px 0px rgba(45, 27, 14, 0.8)',
-          }}
         >
-          {isSubmitting ? (
-            <>
-              <span className="animate-spin">⏳</span>
-              <span>Invio in corso...</span>
-            </>
-          ) : (
-            <>
-              <span>Invia Ordine</span>
-              <span className="text-2xl">🛵</span>
-            </>
+          {isSubmitting ? 'Elaborazione in corso...' : 'Conferma Ordine'}
+          {!isSubmitting && (
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
           )}
         </button>
-      </div>
+      )}
+
+      {formData.payment_method === 'paypal' && !isFormValid() && (
+        <div className="text-center text-gray-600 font-body text-sm">
+          Compila tutti i campi richiesti per visualizzare il pulsante PayPal
+        </div>
+      )}
     </form>
   );
 };

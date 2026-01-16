@@ -1,344 +1,263 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import MenuGrid from '@/components/menu/MenuGrid';
-import CategoryFilter from '@/components/menu/CategoryFilter';
-import FluidReveal from '@/components/ui/FluidReveal';
-import { MENU, getTopSellers } from '@/data/menu';
-import { MenuCategoryId } from '@/types/menu';
-import { useCart } from '@/contexts/CartContext';
+import ChefStory from '@/components/home/ChefStory';
+import Link from 'next/link';
 
 export default function HomePage() {
-  const [activeCategory, setActiveCategory] = useState<MenuCategoryId | 'all'>('all');
-  const [addingItemId, setAddingItemId] = useState<string | null>(null);
-  const topSellers = getTopSellers();
-  const { dispatch } = useCart();
-
-  const filteredItems = activeCategory === 'all'
-    ? MENU.flatMap(category => category.items)
-    : MENU.find(cat => cat.id === activeCategory)?.items || [];
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-parchment via-cream to-turmeric-50">
-          {/* Decorative background elements */}
-          <div className="absolute inset-0 pointer-events-none">
-            {/* Hand-drawn circle decorations */}
-            <div className="absolute top-20 left-10 w-32 h-32 border-4 border-saffron-300/30 hand-circle animate-spin-slow" />
-            <div className="absolute bottom-40 right-20 w-24 h-24 border-4 border-masala-300/30 hand-circle animate-spin-slow" style={{ animationDirection: 'reverse' }} />
-
-            {/* Floating food emojis */}
-            <div className="absolute top-1/4 right-1/4 text-7xl opacity-20 animate-float">🍛</div>
-            <div className="absolute bottom-1/4 left-1/4 text-6xl opacity-15 animate-float" style={{ animationDelay: '1s' }}>🌶️</div>
-            <div className="absolute top-1/3 left-1/3 text-5xl opacity-10 animate-float" style={{ animationDelay: '2s' }}>🍃</div>
-
-            {/* Blob shapes */}
-            <div className="absolute -top-20 -right-20 w-96 h-96 bg-turmeric-200/20 blob-shape animate-blob" />
-            <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-saffron-200/15 blob-shape-2 animate-blob" style={{ animationDelay: '3s' }} />
+        {/* Hero Section - Premium Fine Dining */}
+        <section className="relative h-screen min-h-[700px] overflow-hidden -mt-[120px] pt-[120px]">
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0">
+            <img
+              alt="Authentic Indian Fine Dining"
+              className="absolute inset-0 w-full h-full object-cover object-center brightness-110"
+              src="/hero-indian-cuisine.png"
+            />
+            {/* Lighter Overlay - 40% brighter */}
+            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-              {/* Left Content */}
-              <div className="text-center lg:text-left animate-fade-in">
-                {/* Playful badge */}
-                <div className="inline-block mb-6">
-                  <span className="inline-flex items-center px-5 py-2 bg-cardamom-500 text-white font-display font-bold text-sm border-2 border-ink transform -rotate-2 hover:rotate-0 transition-transform"
-                    style={{
-                      borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                      boxShadow: '3px 3px 0px rgba(45, 27, 14, 0.8)',
-                    }}>
-                    ✨ Authentic Indian Flavors
+          {/* Content */}
+          <div className="relative h-full flex items-center">
+            <div className="container mx-auto px-8 lg:px-16">
+              <div className="max-w-2xl">
+                {/* Premium Badge */}
+                <div className="inline-flex items-center gap-3 mb-6 animate-fade-in">
+                  <div className="h-px w-12 bg-champagne-gold" />
+                  <span className="text-champagne-gold font-body text-sm tracking-[0.3em] uppercase font-semibold">
+                    Dal 1990 a Torino
                   </span>
+                  <div className="h-px w-12 bg-champagne-gold" />
                 </div>
 
-                {/* Main Title */}
-                <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-ink mb-6 leading-tight">
-                  <span className="inline-block animate-wiggle-slow">Welcome to</span>
-                  <br />
-                  <span className="text-saffron-600 inline-block relative">
-                    NAMASTE
-                    {/* Underline doodle */}
-                    <svg className="absolute -bottom-2 left-0 w-full h-4" viewBox="0 0 200 12">
-                      <path d="M0 6 Q 50 0 100 6 T 200 6" stroke="#F0B429" strokeWidth="4" fill="none" strokeLinecap="round" />
-                    </svg>
-                  </span>
+                {/* Main Heading */}
+                <h1 className="font-display text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] mb-6 tracking-tight drop-shadow-lg">
+                  <span className="block font-light">L&apos;Arte della</span>
+                  <span className="block text-champagne-gold font-semibold italic">Cucina Indiana</span>
                 </h1>
 
-                {/* Subtitle in handwritten style */}
-                <p className="font-accent text-2xl sm:text-3xl md:text-4xl text-masala-600 mb-8 transform -rotate-1">
-                  Where spices dance & flavors sing! 🎶
+                {/* Subheading */}
+                <p className="font-body text-lg md:text-xl text-white/90 mb-10 leading-relaxed max-w-lg font-light drop-shadow-md">
+                  Un viaggio culinario dove tradizione e raffinatezza si incontrano.
+                  Sapori autentici, preparati con passione da oltre 30 anni.
                 </p>
 
-                {/* Description */}
-                <p className="font-body text-lg text-ink/80 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                  Experience the magic of hand-crafted tandoori, aromatic curries, and traditional recipes
-                  passed down through generations. Every dish tells a story of love and tradition.
-                </p>
+                {/* Rating Badge */}
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-champagne-gold" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <span className="text-white/90 font-body text-sm font-medium">4.8 su 2268+ recensioni</span>
+                </div>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-                  <a
-                    href="#menu"
-                    className="group w-full sm:w-auto px-8 py-4 bg-saffron-500 text-white font-display font-bold text-lg hover:bg-saffron-600 transition-all flex items-center justify-center space-x-3 border-3 border-ink hover:scale-105"
-                    style={{
-                      borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                      boxShadow: '5px 5px 0px rgba(45, 27, 14, 0.8)',
-                    }}
+                <div className="flex flex-wrap gap-4">
+                  <Link
+                    href="/menu"
+                    className="group relative inline-flex items-center gap-3 bg-champagne-gold text-deep-burgundy px-8 py-4 font-body font-semibold tracking-wide uppercase text-sm hover:bg-antique-gold transition-all duration-300 shadow-luxury"
                   >
-                    <span>Explore Menu</span>
-                    <span className="text-2xl group-hover:animate-wiggle">🍛</span>
-                  </a>
-
-                  <a
-                    href="tel:+39011796579"
-                    className="group w-full sm:w-auto px-8 py-4 bg-cream text-ink font-display font-bold text-lg hover:bg-turmeric-100 transition-all flex items-center justify-center space-x-3 border-3 border-ink hover:scale-105"
-                    style={{
-                      borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-                      boxShadow: '4px 4px 0px rgba(45, 27, 14, 0.6)',
-                    }}
+                    Scopri il Menù
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                  <Link
+                    href="/reservation"
+                    className="inline-flex items-center gap-3 border border-champagne-gold/50 text-champagne-gold px-8 py-4 font-body font-medium tracking-wide uppercase text-sm hover:bg-champagne-gold/10 hover:border-champagne-gold transition-all duration-300"
                   >
-                    <span className="text-2xl group-hover:animate-wiggle">📞</span>
-                    <span>Call Now</span>
-                  </a>
-                </div>
-
-                {/* Quick Info Badges */}
-                <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-10">
-                  {[
-                    { emoji: '✓', text: '100% Halal', color: 'bg-cardamom-100 text-cardamom-800' },
-                    { emoji: '🕐', text: 'Open Now', color: 'bg-turmeric-100 text-turmeric-800' },
-                    { emoji: '🚗', text: 'Delivery', color: 'bg-saffron-100 text-saffron-800' },
-                  ].map((badge, i) => (
-                    <span
-                      key={i}
-                      className={`inline-flex items-center px-4 py-2 ${badge.color} font-display font-bold text-sm border-2 border-ink/30`}
-                      style={{
-                        borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                      }}
-                    >
-                      <span className="mr-2">{badge.emoji}</span>
-                      {badge.text}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right Content - Fluid Reveal Image */}
-              <div className="relative animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                {/* Decorative frame */}
-                <div className="absolute -inset-4 bg-turmeric-200/30 -z-10 animate-blob"
-                  style={{
-                    borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
-                  }} />
-
-                {/* Tape decorations */}
-                <div className="absolute -top-6 left-8 w-20 h-8 bg-saffron-300/70 transform -rotate-12 z-20"
-                  style={{ borderRadius: '2px' }} />
-                <div className="absolute -bottom-4 right-12 w-16 h-6 bg-turmeric-300/70 transform rotate-6 z-20"
-                  style={{ borderRadius: '2px' }} />
-
-                {/* Interactive Image Reveal */}
-                <div className="relative overflow-hidden border-4 border-ink"
-                  style={{
-                    borderRadius: '30px 4px 30px 4px',
-                    boxShadow: '8px 8px 0px rgba(45, 27, 14, 0.7)',
-                  }}>
-                  <FluidReveal
-                    topImage="/Images/Chicken Curry.png"
-                    bottomImage="/Images/Tandoori Chicken.png"
-                    revealSize={100}
-                    smoothness={0.08}
-                    deformation={20}
-                    trailDecay={0.93}
-                    className="aspect-square sm:aspect-[4/3] w-full"
-                    alt="Discover our delicious dishes"
-                  />
-                </div>
-
-                {/* Floating label */}
-                <div className="absolute -right-4 top-1/2 transform translate-x-0 -translate-y-1/2 -rotate-90 origin-center">
-                  <span className="font-accent text-xl text-masala-500">hover to explore ✨</span>
+                    Prenota un Tavolo
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Wavy bottom border */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
-            <svg viewBox="0 0 1200 60" className="w-full h-16 fill-parchment">
-              <path d="M0 30 Q 150 60 300 30 T 600 30 T 900 30 T 1200 30 L 1200 60 L 0 60 Z" />
-            </svg>
-          </div>
+          {/* Decorative Gold Line */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-champagne-gold/50 to-transparent" />
         </section>
 
-        {/* Featured Dishes Section */}
-        <section className="py-20 bg-parchment relative overflow-hidden">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16 animate-fade-in">
-              <span className="font-accent text-xl text-saffron-600 block mb-2">don&apos;t miss these!</span>
-              <h2 className="section-title">
-                🌟 Chef&apos;s Favorites 🌟
+        {/* Decorative Gold Line */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-champagne-gold/30 to-transparent" />
+
+        {/* Chef's Story Section */}
+        <ChefStory />
+
+        {/* Main Content with Sidebar Layout */}
+        <div className="flex flex-col lg:flex-row">
+          {/* Left Column - La Nostra Promessa */}
+          <section className="w-full lg:w-[65%] bg-pearl py-20 px-8 lg:px-16">
+            {/* Section Header */}
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="h-px w-8 bg-champagne-gold" />
+                <span className="text-champagne-gold font-body text-sm tracking-[0.2em] uppercase">
+                  Perché Sceglierci
+                </span>
+                <div className="h-px w-8 bg-champagne-gold" />
+              </div>
+              <h2 className="font-display text-4xl lg:text-5xl text-deep-burgundy font-semibold">
+                La Nostra Promessa
               </h2>
-              <p className="font-body text-ink/70 mt-8 max-w-2xl mx-auto">
-                Our most loved dishes, prepared with the finest ingredients and generations of culinary wisdom.
-              </p>
             </div>
 
-            {/* Featured Cards */}
-            <div className="grid md:grid-cols-3 gap-8">
-              {topSellers.slice(0, 3).map((item, index) => (
-                <div
-                  key={item.id}
-                  className="card group"
-                  style={{
-                    animationDelay: `${index * 0.1}s`,
-                  }}
-                >
-                  <div className="relative mb-4 overflow-hidden border-3 border-ink"
-                    style={{
-                      borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-                    }}>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    {item.isTopSeller && (
-                      <span className="badge-bestseller">⭐ Bestseller!</span>
-                    )}
-                  </div>
-
-                  <h3 className="font-display text-xl font-bold text-ink mb-2 group-hover:text-saffron-600 transition-colors">
-                    {item.name}
-                  </h3>
-                  <p className="font-body text-ink/70 text-sm mb-4 line-clamp-2">
-                    {item.description}
-                  </p>
-
-                  <div className="flex justify-between items-center">
-                    <span className="price-tag">€{item.price.toFixed(2)}</span>
-                    <button
-                      onClick={() => {
-                        setAddingItemId(item.id);
-                        dispatch({
-                          type: 'ADD_ITEM',
-                          payload: {
-                            id: item.id,
-                            name: item.name,
-                            price: item.price,
-                            image: item.image,
-                          },
-                        });
-                        setTimeout(() => setAddingItemId(null), 600);
-                      }}
-                      className={`px-4 py-2 font-display font-bold text-sm transition-all border-2 border-ink ${addingItemId === item.id
-                          ? 'bg-cardamom-500 text-white'
-                          : 'bg-saffron-500 text-white hover:bg-saffron-600'
-                        }`}
-                      style={{
-                        borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                        boxShadow: addingItemId === item.id ? 'none' : '2px 2px 0px rgba(45, 27, 14, 0.8)',
-                      }}>
-                      {addingItemId === item.id ? 'Aggiunto! ✓' : 'Aggiungi 🛒'}
-                    </button>
-                  </div>
+            {/* 3-Column Grid for Promises */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              {/* Promise 1 */}
+              <article className="text-center group">
+                <div className="w-20 h-20 mx-auto bg-deep-burgundy/5 border border-champagne-gold/30 flex items-center justify-center mb-6 group-hover:bg-deep-burgundy/10 group-hover:border-champagne-gold transition-all duration-300">
+                  <svg className="w-10 h-10 text-champagne-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
                 </div>
-              ))}
+                <h3 className="font-display text-xl font-semibold text-deep-burgundy mb-3">Ricette Tradizionali</h3>
+                <p className="text-charcoal/70 font-body leading-relaxed text-sm">
+                  Tramandate di generazione in generazione, le nostre ricette mantengono l&apos;essenza dell&apos;India antica.
+                </p>
+              </article>
+
+              {/* Promise 2 */}
+              <article className="text-center group">
+                <div className="w-20 h-20 mx-auto bg-deep-burgundy/5 border border-champagne-gold/30 flex items-center justify-center mb-6 group-hover:bg-deep-burgundy/10 group-hover:border-champagne-gold transition-all duration-300">
+                  <svg className="w-10 h-10 text-champagne-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+                  </svg>
+                </div>
+                <h3 className="font-display text-xl font-semibold text-deep-burgundy mb-3">Ingredienti Freschi</h3>
+                <p className="text-charcoal/70 font-body leading-relaxed text-sm">
+                  Selezioniamo solo prodotti di prima qualità e spezie autentiche importate dall&apos;India.
+                </p>
+              </article>
+
+              {/* Promise 3 */}
+              <article className="text-center group">
+                <div className="w-20 h-20 mx-auto bg-deep-burgundy/5 border border-champagne-gold/30 flex items-center justify-center mb-6 group-hover:bg-deep-burgundy/10 group-hover:border-champagne-gold transition-all duration-300">
+                  <svg className="w-10 h-10 text-champagne-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <h3 className="font-display text-xl font-semibold text-deep-burgundy mb-3">Passione Autentica</h3>
+                <p className="text-charcoal/70 font-body leading-relaxed text-sm">
+                  Ogni piatto è preparato con amore e dedizione, rispettando le tradizioni culinarie indiane.
+                </p>
+              </article>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Full Menu Section */}
-        <section id="menu" className="py-20 sm:py-28 bg-gradient-to-br from-cream via-turmeric-50 to-parchment relative overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-saffron-200/20 blob-shape animate-blob" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-masala-200/10 blob-shape-2 animate-blob" style={{ animationDelay: '4s' }} />
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-16 animate-fade-in">
-              <span className="font-accent text-xl text-masala-500 block mb-2">everything we offer</span>
-              <h2 className="section-title">
-                📜 Our Menu 📜
-              </h2>
-              <p className="font-body text-ink/70 mt-8 max-w-2xl mx-auto">
-                From sizzling tandoori to creamy curries, fragrant biryanis to fresh naan bread -
-                discover the full spectrum of Indian culinary artistry.
-              </p>
+          {/* Right Sidebar */}
+          <aside className="w-full lg:w-[35%] bg-beige-sidebar p-8 lg:p-12 border-l border-gold-accent/20 flex flex-col gap-10">
+            {/* Sidebar Header */}
+            <div className="text-center">
+              <span className="text-deep-red font-serif italic">I Nostri Preferiti</span>
+              <h3 className="font-serif text-2xl font-bold text-deep-red mt-1">Specialità della Casa</h3>
             </div>
 
-            {/* Category Filter */}
-            <div className="mb-12">
-              <CategoryFilter
-                categories={MENU.map(cat => ({ id: cat.id, name: cat.name }))}
-                activeCategory={activeCategory}
-                onCategoryChange={setActiveCategory}
-              />
+            {/* Food Gallery (Arch Images) */}
+            <div className="space-y-6">
+              {/* Item 1 */}
+              <div className="relative group cursor-pointer">
+                <img
+                  alt="Butter Chicken"
+                  className="w-full h-48 object-cover rounded-arch shadow-md group-hover:shadow-xl transition-all duration-300 border-b-4 border-deep-red"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7z42m0BB_GbltlZInwTq91upyjAApvSSHoBZI2afUNEzkGWxZvRw75qxW2M4M1dgtjTVNCAlXCyqvLL3G5-2PAyLDH9s0bZ_ohtCmn41BxPrq6eixW6EksigtD6lm3tYz67az_iKkETjIq-CT8xTpr3qUnArd_8kPRLx1gS43F8553gycrDCeDByrYgEnY5u02MhwP93JjVC17FmU_uWP0HZfEuSI85gxzqtV27GwN7f040jHCCsVV3l6gt7Cr8QG4ac3GVWlXDuI"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-center rounded-none">
+                  <span className="text-white font-serif text-lg tracking-wide">Butter Chicken</span>
+                </div>
+              </div>
+
+              {/* Item 2 */}
+              <div className="relative group cursor-pointer">
+                <img
+                  alt="Naan Bread"
+                  className="w-full h-48 object-cover rounded-arch shadow-md group-hover:shadow-xl transition-all duration-300 border-b-4 border-deep-red"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtaZOXFdidapNuTtu8_6r7S0wWjQq5CmPr6XArE1P5M8iun_8GtgyhILc2oSU2f09QQKMkV4_xdivrRPIT01sjyubqp_v3YD4KWl2LgrInT0VgLbfmb7sCTe7iveQyJLkuSUOxbQZnn2IitZ2ZQJ03DIJWrkho7sNwaD2GtU6MLez11T_aVf62UwXrUMxop7zu42W-jehxU1toowMDKOoXnhEdgZr3pSNK8TiiGrMK57BRX2SeXn3nsZsJIh7xRoj1O_426vii3Ony"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-center">
+                  <span className="text-white font-serif text-lg tracking-wide">Pane Naan & Roti</span>
+                </div>
+              </div>
+
+              {/* Item 3 */}
+              <div className="relative group cursor-pointer">
+                <img
+                  alt="Vegetable Biryani"
+                  className="w-full h-48 object-cover rounded-arch shadow-md group-hover:shadow-xl transition-all duration-300 border-b-4 border-deep-red"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOSYYoWxE1ovvvBIgVOJ-km40d__pzRaqsq5NwDym6dPq5IB75YnqqO38keKtu2SKJKhXP9pXxWhBBIArnHPkGZhEDdWzWJYprDmOlvY_tELuHNvNvzTkX-KyHaMZm_yGN3qMr4N4cBpu5uANxpiH9ENeftf4m8ndpm4qvwbgROSqW-m82oNCFb4qT3mhJyOfOdbIUOa3iATGy8SfHaYFDgB0ZUyQ3zOgRoTIfppC1hquotDZx_56MuwmzyarqiVwHzDjPrARHDGD2"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-center">
+                  <span className="text-white font-serif text-lg tracking-wide">Biryani Vegetariano</span>
+                </div>
+              </div>
             </div>
 
-            {/* Menu Grid */}
-            <MenuGrid items={filteredItems} />
-          </div>
-        </section>
-
-        {/* Call to Action Section */}
-        <section className="py-20 bg-ink text-cream relative overflow-hidden">
-          {/* Decorative pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle, rgba(249, 115, 22, 0.3) 1px, transparent 1px)`,
-              backgroundSize: '30px 30px',
-            }} />
-          </div>
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <span className="font-accent text-2xl text-turmeric-300 block mb-4 animate-wiggle-slow">
-              hungry yet? 🤤
-            </span>
-            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-cream mb-6">
-              Ready to Experience the Magic?
-            </h2>
-            <p className="font-body text-cream/80 text-lg mb-10 max-w-2xl mx-auto">
-              Order now and let our flavors transport you to the heart of India.
-              Delivery available across the city!
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <a
-                href="/cart"
-                className="group px-10 py-5 bg-saffron-500 text-white font-display font-bold text-xl hover:bg-saffron-600 transition-all flex items-center space-x-3 border-3 border-cream hover:scale-105"
-                style={{
-                  borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                  boxShadow: '6px 6px 0px rgba(255, 255, 255, 0.3)',
-                }}
-              >
-                <span>Order Now</span>
-                <span className="text-2xl group-hover:animate-wiggle">🛵</span>
-              </a>
-
-              <a
-                href="https://wa.me/39011796579"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group px-10 py-5 bg-cardamom-500 text-white font-display font-bold text-xl hover:bg-cardamom-600 transition-all flex items-center space-x-3 border-3 border-cream hover:scale-105"
-                style={{
-                  borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-                  boxShadow: '6px 6px 0px rgba(255, 255, 255, 0.3)',
-                }}
-              >
-                <span className="text-2xl group-hover:animate-wiggle">💬</span>
-                <span>WhatsApp Us</span>
-              </a>
+            {/* Feature List */}
+            <div className="bg-white/50 p-6 rounded-lg border border-gold-accent/30">
+              <h4 className="font-serif text-xl text-deep-red mb-4 font-bold border-b border-gold-accent/30 pb-2">
+                Perché Sceglierci
+              </h4>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3 text-gray-700">
+                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Cucina Halal Certificata</span>
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Autentico Forno Tandoor</span>
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Opzioni Vegane e Senza Glutine</span>
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Consegna a Domicilio</span>
+                </li>
+              </ul>
             </div>
-          </div>
-        </section>
+
+            {/* Chef Testimonial */}
+            <div className="mt-auto bg-deep-red text-white p-6 rounded-xl relative shadow-xl text-center">
+              <div className="absolute -top-10 left-1/2 transform -translate-x-1/2">
+                <img
+                  alt="Chef Rajesh"
+                  className="w-20 h-20 rounded-full border-4 border-gold-accent object-cover shadow-lg"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnC8HT-K2vPlzbD_Hqa_IJt6FILW06lfxpruUmLaQDRwjn6SxtXl6knnMo-gZWvP0qU8p4DWi3vW8hX5X3d9UWw0JM_-9KFAbs8PtVLrsHHvITSqKROJ6TkkjrIt0O8K22i8IRWTlmwHGhKq31x14pMOOIYOZJVx4Z131DYBdMs_2EdjYXQMHgYR6uBThT8jTrm2FVmazoMa6_pSjUZq3ICAdfzriAF14lUH5rxSw0jwrujQQnOD57ALdqj_yr5OTWcxLVjRkriSBm"
+                />
+              </div>
+              <div className="mt-8">
+                <svg className="inline w-10 h-10 text-gold-accent/30 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                </svg>
+                <p className="italic text-gray-300 mb-4 font-serif leading-relaxed">
+                  &quot;La cucina non è solo mangiare. È molto di più. La cucina è poesia, passione, amore. Ogni piatto che servo porta con sé un pezzo della mia anima.&quot;
+                </p>
+                <div className="font-bold text-gold-accent font-serif tracking-widest text-sm uppercase">Chef Rajesh</div>
+                <div className="text-xs text-white/60">Executive Chef, Namaste</div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </main>
 
       <Footer />

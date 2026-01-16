@@ -13,42 +13,28 @@ export default function CartPage() {
 
   if (state.items.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8ThA0_URR8glx1EvVT9FRTwgbUvOl6FwFwk0DXFKQI2XVntOnXWGFfIRB_wq0SRwLZgCYd-d71a8LZkqHp6GPXlbmDyGcbe_r4auOKv1ArxIFq_00fZ44abwQJTEVv_1bHtXbx9fAfru8Jt1QuvN0FecOxUOARSC9-wL8txoznplmq6jUnCOOeNfeEd2OygoxB-8Gbc1-Plefs3OBiTB9CZ5DfhbaumvaUmw4EFvJQuQfMVu1gPeARe8J94QALM8bMF_GiYVYDup')", backgroundRepeat: "repeat" }}>
         <Header />
-        <main className="flex-1 bg-gradient-to-br from-cream via-turmeric-50 to-parchment relative overflow-hidden flex items-center justify-center py-16">
-          {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-saffron-200/20 blob-shape animate-blob" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-masala-200/10 blob-shape-2 animate-blob" style={{ animationDelay: '4s' }} />
-
+        <main className="flex-1 bg-cream-bg flex items-center justify-center py-16">
           <div className="text-center max-w-md mx-auto px-4 relative z-10 animate-fade-in">
-            <div
-              className="inline-flex items-center justify-center w-28 h-28 bg-turmeric-100 mb-6 border-3 border-ink animate-wiggle-slow"
-              style={{
-                borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
-                boxShadow: '5px 5px 0px rgba(45, 27, 14, 0.6)',
-              }}
-            >
-              <span className="text-5xl">🛒</span>
+            <div className="inline-flex items-center justify-center w-28 h-28 bg-beige-sidebar mb-6 rounded-full border-4 border-gold-accent shadow-xl">
+              <span className="text-6xl">🛒</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-ink mb-3">
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-deep-red mb-4">
               Il tuo carrello è vuoto
             </h2>
-            <p className="font-body text-ink/70 mb-8 text-lg">
-              Sembra che tu non abbia ancora aggiunto piatti deliziosi.
+            <p className="font-body text-gray-600 mb-8 text-lg leading-relaxed">
+              Sembra che tu non abbia ancora aggiunto piatti deliziosi al tuo ordine.
             </p>
-            <span className="font-accent text-lg text-saffron-500 block mb-6">
-              vai a esplorare! ✨
-            </span>
+            <div className="ornament-divider my-6">
+              <span className="text-xl">★</span>
+            </div>
             <Link
-              href="/"
-              className="inline-flex items-center px-8 py-4 bg-saffron-500 text-white font-display font-bold text-lg hover:bg-saffron-600 transition-all space-x-3 border-3 border-ink hover:scale-105"
-              style={{
-                borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
-                boxShadow: '5px 5px 0px rgba(45, 27, 14, 0.8)',
-              }}
+              href="/menu"
+              className="inline-flex items-center px-8 py-4 bg-gold-accent text-white font-serif font-bold text-lg hover:bg-medium-red transition-all space-x-3 rounded shadow-lg"
             >
-              <span>Sfoglia il Menù</span>
-              <span className="text-xl">🍛</span>
+              <span>Esplora il Menù</span>
+              <span className="text-xl">→</span>
             </Link>
           </div>
         </main>
@@ -58,47 +44,49 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8ThA0_URR8glx1EvVT9FRTwgbUvOl6FwFwk0DXFKQI2XVntOnXWGFfIRB_wq0SRwLZgCYd-d71a8LZkqHp6GPXlbmDyGcbe_r4auOKv1ArxIFq_00fZ44abwQJTEVv_1bHtXbx9fAfru8Jt1QuvN0FecOxUOARSC9-wL8txoznplmq6jUnCOOeNfeEd2OygoxB-8Gbc1-Plefs3OBiTB9CZ5DfhbaumvaUmw4EFvJQuQfMVu1gPeARe8J94QALM8bMF_GiYVYDup')", backgroundRepeat: "repeat" }}>
       <Header />
-      <main className="flex-1 bg-gradient-to-br from-cream via-turmeric-50 to-parchment relative overflow-hidden py-12 sm:py-16">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-saffron-200/20 blob-shape animate-blob" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-masala-200/10 blob-shape-2 animate-blob" style={{ animationDelay: '4s' }} />
-        <div className="absolute top-1/3 left-10 text-4xl opacity-10 animate-float">🛒</div>
-
+      <main className="flex-1 py-12 sm:py-16 bg-cream-bg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-10 animate-fade-in">
-            <span className="font-accent text-xl text-masala-500 block mb-2">
-              quasi pronto! ✨
-            </span>
-            <h1 className="section-title">
-              🛒 Il tuo Carrello 🛒
+          {/* Page Header */}
+          <div className="text-center mb-12 animate-fade-in">
+            <div className="ornament-divider mb-4">
+              <span className="text-2xl">★</span>
+            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-deep-red mb-3">
+              Il Tuo Carrello
             </h1>
+            <p className="text-gray-600 font-body">
+              Rivedi i tuoi piatti selezionati e procedi al checkout
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {/* Cart Items */}
             <div className="lg:col-span-2">
-              <div
-                className="bg-white p-6 sm:p-8 border-3 border-ink"
-                style={{
-                  borderRadius: '30px 4px 30px 4px',
-                  boxShadow: '6px 6px 0px rgba(45, 27, 14, 0.7)',
-                }}
-              >
-                <div className="divide-y-2 divide-dashed divide-ink/20">
+              <div className="bg-white p-6 sm:p-8 rounded-xl shadow-premium border border-gold-accent/20">
+                <h2 className="font-serif text-2xl font-bold text-medium-red mb-6 pb-4 border-b-2 border-dotted border-gray-300">
+                  I Tuoi Piatti
+                </h2>
+
+                <div className="space-y-4">
                   {state.items.map((item) => (
                     <CartItem key={item.id} item={item} />
                   ))}
                 </div>
 
-                <div className="mt-8 flex justify-end">
+                <div className="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
+                  <Link
+                    href="/menu"
+                    className="inline-flex items-center px-6 py-3 text-medium-red font-serif font-bold hover:text-gold-accent transition-colors space-x-2"
+                  >
+                    <span>←</span>
+                    <span>Continua lo Shopping</span>
+                  </Link>
+
                   <button
                     onClick={() => dispatch({ type: 'CLEAR_CART' })}
-                    className="px-6 py-3 bg-cream text-masala-600 font-display font-bold hover:bg-masala-100 transition-all border-2 border-ink flex items-center space-x-2"
-                    style={{
-                      borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px',
-                      boxShadow: '3px 3px 0px rgba(45, 27, 14, 0.5)',
-                    }}
+                    className="px-6 py-3 bg-gray-100 text-gray-700 font-serif font-bold hover:bg-gray-200 transition-all rounded flex items-center space-x-2 border border-gray-300"
                   >
                     <span>Svuota Carrello</span>
                     <span>🗑️</span>
@@ -107,6 +95,7 @@ export default function CartPage() {
               </div>
             </div>
 
+            {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-24">
                 <CartSummary />

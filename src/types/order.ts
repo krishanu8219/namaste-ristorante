@@ -1,6 +1,14 @@
 export type OrderType = 'pickup' | 'delivery';
 export type OrderStatus = 'pending' | 'accepted' | 'completed' | 'cancelled';
-export type PaymentMethod = 'cash' | 'satispay' | 'card';
+export type PaymentMethod = 'cash' | 'stripe' | 'paypal' | 'satispay';
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'cancelled';
+
+export interface PaymentDetails {
+  provider: PaymentMethod;
+  transactionId?: string;
+  status: PaymentStatus;
+  paidAt?: string;
+}
 
 export interface OrderItem {
   id: string;
@@ -17,6 +25,8 @@ export interface Order {
   email?: string;
   order_type: OrderType;
   payment_method?: PaymentMethod;
+  payment_status?: PaymentStatus;
+  payment_details?: PaymentDetails;
   address?: string;
   location_description?: string;
   items: OrderItem[];
