@@ -67,7 +67,7 @@ export default function HomePage() {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href="/menu"
-                    className="group relative inline-flex items-center gap-3 bg-champagne-gold text-deep-burgundy px-8 py-4 font-body font-semibold tracking-wide uppercase text-sm hover:bg-antique-gold transition-all duration-300 shadow-luxury"
+                    className="group relative inline-flex items-center gap-3 bg-champagne-gold text-black px-8 py-4 font-body font-bold tracking-wide uppercase text-sm hover:bg-white transition-all duration-300 shadow-xl"
                   >
                     Scopri il Menù
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,7 +76,7 @@ export default function HomePage() {
                   </Link>
                   <Link
                     href="/reservation"
-                    className="inline-flex items-center gap-3 border border-champagne-gold/50 text-champagne-gold px-8 py-4 font-body font-medium tracking-wide uppercase text-sm hover:bg-champagne-gold/10 hover:border-champagne-gold transition-all duration-300"
+                    className="inline-flex items-center gap-3 border-2 border-white bg-white/10 backdrop-blur-sm text-white px-8 py-4 font-body font-bold tracking-wide uppercase text-sm hover:bg-white hover:text-black transition-all duration-300"
                   >
                     Prenota un Tavolo
                   </Link>
