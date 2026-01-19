@@ -19,9 +19,9 @@ export default function ChefStory() {
                             {/* Main Image */}
                             <div className="relative overflow-hidden">
                                 <img
-                                    src="/chef-portrait.png"
-                                    alt="Chef preparing authentic Indian cuisine"
-                                    className="w-full h-[500px] object-cover object-top"
+                                    src="/owners.jpg"
+                                    alt="Founders of Namaste Ristorante"
+                                    className="w-full h-[500px] object-cover object-center"
                                 />
                                 {/* Gold Border Accent */}
                                 <div className="absolute inset-0 border border-champagne-gold/30" />
