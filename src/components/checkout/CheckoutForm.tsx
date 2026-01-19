@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart, calculateTotal } from '@/contexts/CartContext';
 import { OrderFormData, PaymentMethod } from '@/types/order';
@@ -21,15 +21,25 @@ const CheckoutForm: React.FC = () => {
   const [error, setError] = useState('');
   const [orderId, setOrderId] = useState<string | null>(null);
 
+  // Initialize form data with values from cart context (auto-fill)
   const [formData, setFormData] = useState<OrderFormData>({
     customer_name: '',
     phone: '',
     email: '',
-    order_type: 'delivery',
+    order_type: state.orderType === 'pickup' ? 'pickup' : 'delivery',
     payment_method: 'stripe',
-    address: '',
+    address: state.deliveryAddress || '',
     location_description: '',
   });
+
+  // Update form when cart context changes (in case user navigates back and forth)
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      order_type: state.orderType === 'pickup' ? 'pickup' : 'delivery',
+      address: state.deliveryAddress || prev.address,
+    }));
+  }, [state.orderType, state.deliveryAddress]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -249,11 +259,14 @@ const CheckoutForm: React.FC = () => {
                 value="delivery"
                 checked={formData.order_type === 'delivery'}
                 onChange={handleChange}
-                className="peer sr-only"
+                className="sr-only"
               />
-              <div className="border-2 border-gray-200 peer-checked:border-deep-red peer-checked:bg-red-50 rounded-lg p-3 hover:border-gold-accent transition-all h-full flex flex-col items-center text-center">
-                <div className="w-4 h-4 rounded-full border-2 border-gray-300 peer-checked:border-deep-red mb-2 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-transparent peer-checked:bg-deep-red transition-colors"></div>
+              <div className={`border-2 rounded-lg p-3 hover:border-gold-accent transition-all h-full flex flex-col items-center text-center ${formData.order_type === 'delivery' ? 'border-deep-red bg-red-50' : 'border-gray-200'
+                }`}>
+                <div className={`w-4 h-4 rounded-full border-2 mb-2 flex items-center justify-center ${formData.order_type === 'delivery' ? 'border-deep-red' : 'border-gray-300'
+                  }`}>
+                  <div className={`w-2 h-2 rounded-full transition-colors ${formData.order_type === 'delivery' ? 'bg-deep-red' : 'bg-transparent'
+                    }`}></div>
                 </div>
                 <svg className="w-7 h-7 text-gold-accent mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
@@ -269,11 +282,14 @@ const CheckoutForm: React.FC = () => {
                 value="pickup"
                 checked={formData.order_type === 'pickup'}
                 onChange={handleChange}
-                className="peer sr-only"
+                className="sr-only"
               />
-              <div className="border-2 border-gray-200 peer-checked:border-deep-red peer-checked:bg-red-50 rounded-lg p-3 hover:border-gold-accent transition-all h-full flex flex-col items-center text-center">
-                <div className="w-4 h-4 rounded-full border-2 border-gray-300 peer-checked:border-deep-red mb-2 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-transparent peer-checked:bg-deep-red transition-colors"></div>
+              <div className={`border-2 rounded-lg p-3 hover:border-gold-accent transition-all h-full flex flex-col items-center text-center ${formData.order_type === 'pickup' ? 'border-deep-red bg-red-50' : 'border-gray-200'
+                }`}>
+                <div className={`w-4 h-4 rounded-full border-2 mb-2 flex items-center justify-center ${formData.order_type === 'pickup' ? 'border-deep-red' : 'border-gray-300'
+                  }`}>
+                  <div className={`w-2 h-2 rounded-full transition-colors ${formData.order_type === 'pickup' ? 'bg-deep-red' : 'bg-transparent'
+                    }`}></div>
                 </div>
                 <svg className="w-7 h-7 text-gold-accent mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -383,29 +399,35 @@ const CheckoutForm: React.FC = () => {
             <h3 className="font-display text-lg font-bold text-deep-red">Pagamento</h3>
           </div>
           <div className="space-y-2">
-            {paymentMethods.map((method) => (
-              <label key={method.value} className="cursor-pointer group block">
-                <input
-                  type="radio"
-                  name="payment_method"
-                  value={method.value}
-                  checked={formData.payment_method === method.value}
-                  onChange={handleChange}
-                  className="peer sr-only"
-                />
-                <div className="border border-gray-200 peer-checked:border-deep-red peer-checked:bg-red-50 rounded-lg p-2.5 hover:border-gold-accent transition-all flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-4 h-4 rounded-full border-2 border-gray-300 peer-checked:border-deep-red flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-transparent peer-checked:bg-deep-red transition-colors"></div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-sm text-gray-800">{method.label}</span>
-                      <span className="text-xs text-gray-500">{method.description}</span>
+            {paymentMethods.map((method) => {
+              const isSelected = formData.payment_method === method.value;
+              return (
+                <label key={method.value} className="cursor-pointer group block">
+                  <input
+                    type="radio"
+                    name="payment_method"
+                    value={method.value}
+                    checked={isSelected}
+                    onChange={handleChange}
+                    className="sr-only"
+                  />
+                  <div className={`border rounded-lg p-2.5 hover:border-gold-accent transition-all flex items-center justify-between ${isSelected ? 'border-deep-red bg-red-50' : 'border-gray-200'
+                    }`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-deep-red' : 'border-gray-300'
+                        }`}>
+                        <div className={`w-2 h-2 rounded-full transition-colors ${isSelected ? 'bg-deep-red' : 'bg-transparent'
+                          }`}></div>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-sm text-gray-800">{method.label}</span>
+                        <span className="text-xs text-gray-500">{method.description}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </label>
-            ))}
+                </label>
+              );
+            })}
           </div>
         </div>
       </div>

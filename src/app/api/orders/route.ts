@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { sendOrderEmail } from '@/lib/email';
 import { sendTelegramNotification } from '@/lib/telegram';
+import { saveOrder } from '@/lib/orders-store';
 import { Order } from '@/types/order';
 
 export async function POST(request: Request) {
@@ -98,18 +99,21 @@ export async function POST(request: Request) {
       status: 'pending'
     };
 
+    // Save order to store for admin portal
+    saveOrder(order);
+
     // Send Email Notification
     const emailSent = await sendOrderEmail(order, orderId);
-    
+
     // Send Telegram notification
     const telegramSent = await sendTelegramNotification(order);
 
     if (!emailSent) {
-       console.warn('Email failed to send, but order processed via Telegram');
+      console.warn('Email failed to send, but order processed via Telegram');
     }
-    
+
     if (!telegramSent) {
-       console.warn('Telegram notification failed to send');
+      console.warn('Telegram notification failed to send');
     }
 
     return NextResponse.json(

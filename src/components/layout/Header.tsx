@@ -46,15 +46,15 @@ const Header: React.FC = () => {
     : 'bg-deep-red shadow-lg';
 
   return (
-    <header className={`text-white py-1 sticky top-0 z-50 transition-all duration-300 ${headerClass}`}>
+    <header className={`text-white py-4 sticky top-0 z-50 transition-all duration-300 ${headerClass}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo Section */}
         <Link href="/" className="flex items-center gap-2 group">
           {/* Logo Image */}
           <img
-            src="/logo.png"
+            src="/namaste-logo.png"
             alt="Namaste India Logo"
-            className="h-16 md:h-21 w-auto object-contain group-hover:scale-105 transition-transform"
+            className="h-28 md:h-32 w-auto object-contain group-hover:scale-105 transition-transform"
           />
         </Link>
 

@@ -15,16 +15,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between py-6 gap-4 border-b border-dotted border-gray-300 last:border-0">
       <div className="flex items-center gap-4 flex-1">
-        {item.image && (
-          <div className="relative w-24 h-24 overflow-hidden flex-shrink-0 rounded-lg border-2 border-gold-accent/30 shadow-md">
-            <Image
-              src={item.image}
-              alt={item.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-        )}
+
         <div>
           <h3 className="font-serif font-bold text-deep-red text-xl mb-1">{item.name}</h3>
           <p className="text-sm font-body text-gray-600">€{item.price.toFixed(2)} cadauno</p>

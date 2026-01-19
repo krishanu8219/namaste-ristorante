@@ -8,6 +8,9 @@ export interface CartItem {
 
 export interface CartState {
   items: CartItem[];
+  serviceCost?: number;
+  orderType?: 'delivery' | 'pickup';
+  deliveryAddress?: string;
 }
 
 export type CartAction =
@@ -15,4 +18,7 @@ export type CartAction =
   | { type: 'REMOVE_ITEM'; payload: { id: string } }
   | { type: 'INCREMENT_ITEM'; payload: { id: string } }
   | { type: 'DECREMENT_ITEM'; payload: { id: string } }
-  | { type: 'CLEAR_CART' };
+  | { type: 'CLEAR_CART' }
+  | { type: 'SET_SERVICE_COST'; payload: number }
+  | { type: 'SET_ORDER_TYPE'; payload: 'delivery' | 'pickup' }
+  | { type: 'SET_DELIVERY_ADDRESS'; payload: string };

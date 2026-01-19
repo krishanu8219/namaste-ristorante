@@ -4,6 +4,8 @@ import React from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ChefStory from '@/components/home/ChefStory';
+import ReviewsCarousel from '@/components/home/ReviewsCarousel';
+import FadeIn from '@/components/animations/FadeIn';
 import Link from 'next/link';
 
 export default function HomePage() {
@@ -13,7 +15,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section - Premium Fine Dining */}
-        <section className="relative h-screen min-h-[700px] overflow-hidden -mt-[120px] pt-[120px]">
+        <section className="relative h-screen min-h-[700px] overflow-hidden -mt-[144px] md:-mt-[160px] pt-[144px] md:pt-[160px]">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0">
             <img
@@ -24,10 +26,13 @@ export default function HomePage() {
             {/* Lighter Overlay - 40% brighter */}
             <div className="absolute inset-0 bg-black/30" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+
+            {/* Left Side Burgundy Fade - Over Image, Under Text */}
+            <div className="absolute inset-y-0 left-0 w-3/5 bg-gradient-to-r from-deep-burgundy via-deep-burgundy/85 to-transparent" />
           </div>
 
           {/* Content */}
-          <div className="relative h-full flex items-center">
+          <div className="relative h-full flex items-center z-10">
             <div className="container mx-auto px-8 lg:px-16">
               <div className="max-w-2xl">
                 {/* Premium Badge */}
@@ -85,20 +90,28 @@ export default function HomePage() {
             </div>
           </div>
 
+
+
           {/* Decorative Gold Line */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-champagne-gold/50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-champagne-gold/50 to-transparent z-20" />
         </section>
 
         {/* Decorative Gold Line */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-champagne-gold/30 to-transparent" />
 
         {/* Chef's Story Section */}
-        <ChefStory />
+        <FadeIn>
+          <ChefStory />
+        </FadeIn>
 
-        {/* Main Content with Sidebar Layout */}
-        <div className="flex flex-col lg:flex-row">
-          {/* Left Column - La Nostra Promessa */}
-          <section className="w-full lg:w-[65%] bg-pearl py-20 px-8 lg:px-16">
+        {/* Reviews Carousel */}
+        <FadeIn>
+          <ReviewsCarousel />
+        </FadeIn>
+
+        {/* La Nostra Promessa - Full Width */}
+        <FadeIn>
+          <section className="w-full bg-pearl py-20 px-8 lg:px-16">
             {/* Section Header */}
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-3 mb-4">
@@ -155,109 +168,7 @@ export default function HomePage() {
               </article>
             </div>
           </section>
-
-          {/* Right Sidebar */}
-          <aside className="w-full lg:w-[35%] bg-beige-sidebar p-8 lg:p-12 border-l border-gold-accent/20 flex flex-col gap-10">
-            {/* Sidebar Header */}
-            <div className="text-center">
-              <span className="text-deep-red font-serif italic">I Nostri Preferiti</span>
-              <h3 className="font-serif text-2xl font-bold text-deep-red mt-1">Specialità della Casa</h3>
-            </div>
-
-            {/* Food Gallery (Arch Images) */}
-            <div className="space-y-6">
-              {/* Item 1 */}
-              <div className="relative group cursor-pointer">
-                <img
-                  alt="Butter Chicken"
-                  className="w-full h-48 object-cover rounded-arch shadow-md group-hover:shadow-xl transition-all duration-300 border-b-4 border-deep-red"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7z42m0BB_GbltlZInwTq91upyjAApvSSHoBZI2afUNEzkGWxZvRw75qxW2M4M1dgtjTVNCAlXCyqvLL3G5-2PAyLDH9s0bZ_ohtCmn41BxPrq6eixW6EksigtD6lm3tYz67az_iKkETjIq-CT8xTpr3qUnArd_8kPRLx1gS43F8553gycrDCeDByrYgEnY5u02MhwP93JjVC17FmU_uWP0HZfEuSI85gxzqtV27GwN7f040jHCCsVV3l6gt7Cr8QG4ac3GVWlXDuI"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-center rounded-none">
-                  <span className="text-white font-serif text-lg tracking-wide">Butter Chicken</span>
-                </div>
-              </div>
-
-              {/* Item 2 */}
-              <div className="relative group cursor-pointer">
-                <img
-                  alt="Naan Bread"
-                  className="w-full h-48 object-cover rounded-arch shadow-md group-hover:shadow-xl transition-all duration-300 border-b-4 border-deep-red"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtaZOXFdidapNuTtu8_6r7S0wWjQq5CmPr6XArE1P5M8iun_8GtgyhILc2oSU2f09QQKMkV4_xdivrRPIT01sjyubqp_v3YD4KWl2LgrInT0VgLbfmb7sCTe7iveQyJLkuSUOxbQZnn2IitZ2ZQJ03DIJWrkho7sNwaD2GtU6MLez11T_aVf62UwXrUMxop7zu42W-jehxU1toowMDKOoXnhEdgZr3pSNK8TiiGrMK57BRX2SeXn3nsZsJIh7xRoj1O_426vii3Ony"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-center">
-                  <span className="text-white font-serif text-lg tracking-wide">Pane Naan & Roti</span>
-                </div>
-              </div>
-
-              {/* Item 3 */}
-              <div className="relative group cursor-pointer">
-                <img
-                  alt="Vegetable Biryani"
-                  className="w-full h-48 object-cover rounded-arch shadow-md group-hover:shadow-xl transition-all duration-300 border-b-4 border-deep-red"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOSYYoWxE1ovvvBIgVOJ-km40d__pzRaqsq5NwDym6dPq5IB75YnqqO38keKtu2SKJKhXP9pXxWhBBIArnHPkGZhEDdWzWJYprDmOlvY_tELuHNvNvzTkX-KyHaMZm_yGN3qMr4N4cBpu5uANxpiH9ENeftf4m8ndpm4qvwbgROSqW-m82oNCFb4qT3mhJyOfOdbIUOa3iATGy8SfHaYFDgB0ZUyQ3zOgRoTIfppC1hquotDZx_56MuwmzyarqiVwHzDjPrARHDGD2"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-center">
-                  <span className="text-white font-serif text-lg tracking-wide">Biryani Vegetariano</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Feature List */}
-            <div className="bg-white/50 p-6 rounded-lg border border-gold-accent/30">
-              <h4 className="font-serif text-xl text-deep-red mb-4 font-bold border-b border-gold-accent/30 pb-2">
-                Perché Sceglierci
-              </h4>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Cucina Halal Certificata</span>
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Autentico Forno Tandoor</span>
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Opzioni Vegane e Senza Glutine</span>
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Consegna a Domicilio</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Chef Testimonial */}
-            <div className="mt-auto bg-deep-red text-white p-6 rounded-xl relative shadow-xl text-center">
-              <div className="absolute -top-10 left-1/2 transform -translate-x-1/2">
-                <img
-                  alt="Chef Rajesh"
-                  className="w-20 h-20 rounded-full border-4 border-gold-accent object-cover shadow-lg"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnC8HT-K2vPlzbD_Hqa_IJt6FILW06lfxpruUmLaQDRwjn6SxtXl6knnMo-gZWvP0qU8p4DWi3vW8hX5X3d9UWw0JM_-9KFAbs8PtVLrsHHvITSqKROJ6TkkjrIt0O8K22i8IRWTlmwHGhKq31x14pMOOIYOZJVx4Z131DYBdMs_2EdjYXQMHgYR6uBThT8jTrm2FVmazoMa6_pSjUZq3ICAdfzriAF14lUH5rxSw0jwrujQQnOD57ALdqj_yr5OTWcxLVjRkriSBm"
-                />
-              </div>
-              <div className="mt-8">
-                <svg className="inline w-10 h-10 text-gold-accent/30 mb-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
-                </svg>
-                <p className="italic text-gray-300 mb-4 font-serif leading-relaxed">
-                  &quot;La cucina non è solo mangiare. È molto di più. La cucina è poesia, passione, amore. Ogni piatto che servo porta con sé un pezzo della mia anima.&quot;
-                </p>
-                <div className="font-bold text-gold-accent font-serif tracking-widest text-sm uppercase">Chef Rajesh</div>
-                <div className="text-xs text-white/60">Executive Chef, Namaste</div>
-              </div>
-            </div>
-          </aside>
-        </div>
+        </FadeIn>
       </main>
 
       <Footer />

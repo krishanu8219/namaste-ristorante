@@ -16,8 +16,8 @@ export async function sendTelegramNotification(order: Order): Promise<boolean> {
 
   // Format the order message
   const orderTypeText = order.order_type === 'delivery' ? '🚚 CONSEGNA' : '🏪 RITIRO';
-  const paymentMethodText = order.payment_method === 'cash' ? '💵 Contanti' : 
-                           order.payment_method === 'satispay' ? '📱 Satispay' : '💳 Carta/Bancomat';
+  const paymentMethodText = order.payment_method === 'cash' ? '💵 Contanti' :
+    order.payment_method === 'satispay' ? '📱 Satispay' : '💳 Carta/Bancomat';
   const itemsList = order.items
     .map((item) => `  • ${item.quantity}x ${item.name} - €${item.unit_price.toFixed(2)}`)
     .join('\n');
@@ -54,6 +54,18 @@ export async function sendTelegramNotification(order: Order): Promise<boolean> {
             chat_id: chatId,
             text: messageBody,
             parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [[
+                {
+                  text: '✅ Conferma Ordine',
+                  callback_data: `confirm_${order.id}`
+                },
+                {
+                  text: '❌ Rifiuta Ordine',
+                  callback_data: `reject_${order.id}`
+                }
+              ]]
+            }
           }),
         });
 

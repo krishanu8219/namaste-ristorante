@@ -1,5 +1,5 @@
 export type OrderType = 'pickup' | 'delivery';
-export type OrderStatus = 'pending' | 'accepted' | 'completed' | 'cancelled';
+export type OrderStatus = 'pending' | 'confirmed' | 'rejected';
 export type PaymentMethod = 'cash' | 'stripe' | 'paypal' | 'satispay';
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'cancelled';
 
@@ -32,6 +32,8 @@ export interface Order {
   items: OrderItem[];
   total_price: number;
   status?: OrderStatus;
+  rejection_reason?: string;
+  status_updated_at?: string;
 }
 
 export interface OrderFormData {

@@ -5,6 +5,7 @@ import { CartState, CartAction, CartItem } from '@/types/cart';
 
 const initialState: CartState = {
   items: [],
+  serviceCost: 0,
 };
 
 const CartContext = createContext<{
@@ -15,10 +16,12 @@ const CartContext = createContext<{
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_ITEM': {
+      // ... (ADD_ITEM logic)
       const existingItem = state.items.find(item => item.id === action.payload.id);
-      
+
       if (existingItem) {
         return {
+          ...state,
           items: state.items.map(item =>
             item.id === action.payload.id
               ? { ...item, quantity: item.quantity + 1 }
@@ -26,20 +29,23 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           ),
         };
       }
-      
+
       return {
+        ...state,
         items: [...state.items, { ...action.payload, quantity: 1 }],
       };
     }
-    
+
     case 'REMOVE_ITEM': {
       return {
+        ...state,
         items: state.items.filter(item => item.id !== action.payload.id),
       };
     }
-    
+
     case 'INCREMENT_ITEM': {
       return {
+        ...state,
         items: state.items.map(item =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
@@ -47,9 +53,10 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ),
       };
     }
-    
+
     case 'DECREMENT_ITEM': {
       return {
+        ...state,
         items: state.items.map(item =>
           item.id === action.payload.id && item.quantity > 1
             ? { ...item, quantity: item.quantity - 1 }
@@ -57,11 +64,32 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ).filter(item => item.quantity > 0),
       };
     }
-    
+
     case 'CLEAR_CART': {
-      return initialState;
+      return { ...initialState, serviceCost: 0 };
     }
-    
+
+    case 'SET_SERVICE_COST': {
+      return {
+        ...state,
+        serviceCost: action.payload
+      };
+    }
+
+    case 'SET_ORDER_TYPE': {
+      return {
+        ...state,
+        orderType: action.payload
+      };
+    }
+
+    case 'SET_DELIVERY_ADDRESS': {
+      return {
+        ...state,
+        deliveryAddress: action.payload
+      };
+    }
+
     default:
       return state;
   }
@@ -106,6 +134,7 @@ export const useCart = () => {
 };
 
 // Helper function to calculate total
-export const calculateTotal = (items: CartItem[]): number => {
-  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+export const calculateTotal = (items: CartItem[], serviceCost: number = 0): number => {
+  const itemsTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return itemsTotal + serviceCost;
 };
