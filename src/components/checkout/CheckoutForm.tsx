@@ -4,12 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart, calculateTotal } from '@/contexts/CartContext';
 import { OrderFormData, PaymentMethod } from '@/types/order';
-import PayPalButton from './PayPalButton';
-
 // Payment method configuration
 const paymentMethods: { value: PaymentMethod; label: string; description: string; sublabel?: string }[] = [
   { value: 'stripe', label: 'Carta di Credito / Debito', description: 'Transazione sicura' },
-  { value: 'paypal', label: 'PayPal', description: 'Paga con PayPal' },
   { value: 'satispay', label: 'Satispay', description: 'App di pagamento mobile' },
   { value: 'cash', label: 'Contanti alla Consegna', description: 'Paga direttamente al fattorino' },
 ];
@@ -446,48 +443,38 @@ const CheckoutForm: React.FC = () => {
             orderId={orderId || 'pending'}
             items={state.items.map(item => ({
               id: item.id,
-              name: item.name,
-              quantity: item.quantity,
-              unit_price: item.price,
-            }))}
-            totalPrice={total}
-            customerName={formData.customer_name}
-            customerEmail={formData.email}
-            onSuccess={handlePayPalSuccess}
-            onError={(err) => setError(err)}
-            onCancel={() => setError('Pagamento annullato')}
-          />
-        </div>
-      )}
-
-      {/* Submit Button */}
-      {formData.payment_method !== 'paypal' && (
-        <button
-          type="submit"
-          disabled={isSubmitting || !isFormValid()}
-          className={`
+      {/* Submit Button */ }
+      {
+                formData.payment_method !== 'paypal' && (
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || !isFormValid()}
+                    className={`
             w-full py-3 rounded font-bold uppercase tracking-widest transition-colors shadow-lg flex items-center justify-center gap-2 group text-sm
             ${isSubmitting || !isFormValid()
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-deep-red text-gold-accent hover:bg-red-900'}
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-deep-red text-gold-accent hover:bg-red-900'}
           `}
-        >
-          {isSubmitting ? 'Elaborazione in corso...' : 'Conferma Ordine'}
-          {!isSubmitting && (
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          )}
-        </button>
-      )}
+                  >
+                    {isSubmitting ? 'Elaborazione in corso...' : 'Conferma Ordine'}
+                    {!isSubmitting && (
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    )}
+                  </button>
+                )
+              }
 
-      {formData.payment_method === 'paypal' && !isFormValid() && (
-        <div className="text-center text-gray-600 font-body text-sm">
-          Compila tutti i campi richiesti per visualizzare il pulsante PayPal
-        </div>
-      )}
+      {
+                formData.payment_method === 'paypal' && !isFormValid() && (
+                  <div className="text-center text-gray-600 font-body text-sm">
+                    Compila tutti i campi richiesti per visualizzare il pulsante PayPal
+                  </div>
+                )
+              }
     </form>
-  );
+      );
 };
 
-export default CheckoutForm;
+      export default CheckoutForm;

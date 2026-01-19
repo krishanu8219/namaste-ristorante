@@ -22,7 +22,7 @@ export async function sendTelegramNotification(order: Order): Promise<boolean> {
     .map((item) => `  • ${item.quantity}x ${item.name} - €${item.unit_price.toFixed(2)}`)
     .join('\n');
 
-  let messageBody = `🍽️ <b>NUOVO ORDINE - Apna Punjab</b>\n\n`;
+  let messageBody = `🍽️ <b>NUOVO ORDINE - Namaste Ristorante</b>\n\n`;
   messageBody += `<b>${orderTypeText}</b>\n\n`;
   messageBody += `👤 <b>Cliente:</b> ${order.customer_name}\n`;
   messageBody += `📞 <b>Telefono:</b> ${order.phone}\n`;
